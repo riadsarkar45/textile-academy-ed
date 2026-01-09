@@ -35,8 +35,8 @@ const MockTest = () => {
 
     return (
         <div className="w-[50rem] m-auto">
-            <h2 className="mb-8">Select Topic</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <h2 className="mb-8 text-xl">Select Topic</h2>
+            <div className="grid grid-cols-2 gap-4 mb-10">
                 {
                     diplomaSubjects.map((subject, index) => (
                         <div key={index} className="border flex items-center gap-3 text-xl p-2 bg-white shadow rounded-lg hover:bg-gray-100 cursor-pointer">
@@ -44,6 +44,14 @@ const MockTest = () => {
                         </div>
                     ))
                 }
+            </div>
+            <div className="mb-8">
+                <h2 className="mb-4 text-xl">Preset Exam</h2>
+                <div className="flex gap-2">
+                    <h2 className="bg-white p-2 rounded-md">DUET Admission Preparation</h2>
+                    <h2 className="bg-white p-2 rounded-md">BUTEX Admission Preparation</h2>
+                    <h2 className="bg-white p-2 rounded-md">Government Job Preparation</h2>
+                </div>
             </div>
         </div>
     );
