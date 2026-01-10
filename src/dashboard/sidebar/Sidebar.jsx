@@ -7,6 +7,7 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { GrHistory } from "react-icons/gr";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { GiProgression } from "react-icons/gi";
+import { Link } from "react-router";
 export default function Sidebar() {
     const [open, setOpen] = useState(false);
 
@@ -31,54 +32,61 @@ export default function Sidebar() {
 
                 {/* Scrollable Menu */}
                 <nav className="flex-1 overflow-y-auto p-3 space-y-5">
-                    <a
-                        href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                    <Link
+                        to="/"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <FaHome /> Dashboard
-                    </a>
+                    </Link>
                     <a
                         href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <FaCircleQuestion /> Question Bank
                     </a>
-                    <a
+                    <Link
+                        to="/practice-exam"
                         href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <TbPlayerTrackNextFilled /> Fast Practice
-                    </a>
-                    <a
-                        href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                    </Link>
+                    <Link
+                        to="/mock-exam"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <FaPenToSquare /> Mock Exam
-                    </a>
-                    <a
-                        href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                    </Link>
+                    <Link
+                        to="/community"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <HiOutlineUserGroup /> Community
-                    </a>
+                    </Link>
                     <a
                         href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <GrHistory /> History
                     </a>
                     <a
                         href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <MdOutlineLeaderboard /> Leader Board
                     </a>
                     <a
                         href="#"
-                        className="block flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <GiProgression /> Progress
                     </a>
+                    <Link
+                        to="/create-mcq"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                        <GiProgression /> Create MCQ
+                    </Link>
 
                 </nav>
 
