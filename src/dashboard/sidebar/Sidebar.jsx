@@ -38,12 +38,12 @@ export default function Sidebar() {
                     >
                         <FaHome /> Dashboard
                     </Link>
-                    <a
-                        href="#"
+                    <Link
+                        to="/question-bank"
                         className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <FaCircleQuestion /> Question Bank
-                    </a>
+                    </Link>
                     <Link
                         to="/practice-exam"
                         href="#"

@@ -9,7 +9,7 @@ const Root = () => {
             <Sidebar />
 
             {/* Main content takes remaining space and scrolls */}
-            <main className="ml-[16rem] w-full h-screen overflow-y-auto p-6 bg-gray-100 bg-opacity-1">
+            <main className="ml-[16rem] w-full h-screen overflow-y-auto p-6 bg-gray-50 bg-opacity-1">
                 <Outlet />
             </main>
         </div>
