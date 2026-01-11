@@ -1,5 +1,6 @@
 import { CiStopwatch } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
+import FixedBottomBar from "../../../components/FixedBottomBar";
 const McqQuestions = () => {
     return (
         <div className=" w-[50rem] m-auto">
@@ -62,6 +63,8 @@ const McqQuestions = () => {
                     </div>
                 </div>
             </div>
+                    <FixedBottomBar />
+
         </div>
     );
 };

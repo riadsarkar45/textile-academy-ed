@@ -8,6 +8,7 @@ import { GrHistory } from "react-icons/gr";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { GiProgression } from "react-icons/gi";
 import { Link } from "react-router";
+import Logo from "../../assets/cropped-online-textile-academy-logo-favicon.webp"
 export default function Sidebar() {
     const [open, setOpen] = useState(false);
 
@@ -27,7 +28,9 @@ export default function Sidebar() {
             >
                 {/* Header (fixed) */}
                 <div className="h-16  p-3 flex items-center border-b border-gray-700 shrink-0">
-                    <h1 className="text-xl font-bold font-serif">Textile Academy</h1>
+                    <img className="h-[2rem] w-[5rem] " src={Logo} alt="" />
+                    <h1 className="text-md font-bold font-serif">Textile Academy</h1>
+
                 </div>
 
                 {/* Scrollable Menu */}
