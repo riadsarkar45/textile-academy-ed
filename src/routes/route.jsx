@@ -5,6 +5,7 @@ import MockTest from "../dashboard/pages/mock-test/MockTest";
 import FastTest from "../dashboard/pages/mock-test/FastTest";
 import CreateNewMcq from "../dashboard/pages/mcq/CreateNewMcq";
 import QuestionBank from "../dashboard/pages/questionBank/QuestionBank";
+import McqQuestions from "../dashboard/pages/questionBank/McqQuestions";
 
 const Routes = createBrowserRouter(
     [
@@ -32,6 +33,10 @@ const Routes = createBrowserRouter(
                 {
                     path:'/question-bank',
                     element: <QuestionBank/>
+                },
+                {
+                    path:'/question-bank/mcq-questions',
+                    element: <McqQuestions/>
                 }
             ]
         }

@@ -1,6 +1,7 @@
 import { GiGears, GiMaterialsScience, GiOfficeChair, GiEmptyMetalBucket, GiSewingMachine, GiSpinningWheel, GiTestTubes, GiVintageRobot } from "react-icons/gi";
 import { TbNeedleThread } from "react-icons/tb";
 import { MdRollerShades } from "react-icons/md";
+import { Link } from "react-router";
 const QuestionBank = () => {
 const diplomaSubjects = [
         { name: "Introduction", icon: GiMaterialsScience },
@@ -19,7 +20,9 @@ const diplomaSubjects = [
             <div className="grid grid-cols-3 gap-4">
                 {
                     diplomaSubjects.map((exams, i) =>
-                        <h2 key={i} className="bg-gray-100 p-5 h-[8rem] font-serif rounded-lg flex items-center justify-center text-2xl border border-gray-200 cursor-pointer hover:bg-white">{<exams.icon/>}  {exams.name}</h2>
+                        <Link to="/question-bank/mcq-questions" key={i}>
+                            <h2 key={i} className="bg-gray-100 p-5 h-[8rem] font-serif rounded-lg flex items-center justify-center text-2xl border border-gray-200 cursor-pointer hover:bg-white">{<exams.icon/>}  {exams.name}</h2>
+                        </Link>
                     )
                 }
             </div>
