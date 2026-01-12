@@ -7,7 +7,7 @@ import CreateNewMcq from "../dashboard/pages/mcq/CreateNewMcq";
 import QuestionBank from "../dashboard/pages/questionBank/QuestionBank";
 import McqQuestions from "../dashboard/pages/questionBank/McqQuestionsBank";
 import StartExam from "../dashboard/pages/questionBank/StartExam";
-import Exam from "../dashboard/pages/mock-test/Exam";
+import Exam from "../dashboard/pages/mock-test/WrittenExam";
 
 const Routes = createBrowserRouter(
     [
