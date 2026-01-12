@@ -5,11 +5,13 @@ import MockTest from "../dashboard/pages/mock-test/MockTest";
 import FastTest from "../dashboard/pages/mock-test/FastTest";
 import CreateNewMcq from "../dashboard/pages/mcq/CreateNewMcq";
 import QuestionBank from "../dashboard/pages/questionBank/QuestionBank";
-import McqQuestions from "../dashboard/pages/questionBank/McqQuestions";
+import McqQuestions from "../dashboard/pages/questionBank/McqQuestionsBank";
+import StartExam from "../dashboard/pages/questionBank/StartExam";
+import Exam from "../dashboard/pages/mock-test/Exam";
 
 const Routes = createBrowserRouter(
     [
-    
+
         {
             path: '/',
             element: <Root />,
@@ -20,23 +22,31 @@ const Routes = createBrowserRouter(
                 },
                 {
                     path: '/mock-exam',
-                    element: <MockTest/>
+                    element: <MockTest />
                 },
                 {
                     path: '/practice-exam',
-                    element: <FastTest/>
+                    element: <FastTest />
                 },
                 {
                     path: '/create-mcq',
-                    element: <CreateNewMcq/>
+                    element: <CreateNewMcq />
                 },
                 {
-                    path:'/question-bank',
-                    element: <QuestionBank/>
+                    path: '/question-bank',
+                    element: <QuestionBank />
                 },
                 {
-                    path:'/question-bank/mcq-questions',
-                    element: <McqQuestions/>
+                    path: '/question-bank/mcq-questions',
+                    element: <McqQuestions />
+                },
+                {
+                    path: '/live-exam',
+                    element: <StartExam />
+                },
+                {
+                    path: '/exam',
+                    element: <Exam />
                 }
             ]
         }
