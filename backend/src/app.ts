@@ -1,7 +1,7 @@
-import cors from "@fastify/cors";
-import { routes } from "./routes/home.route";
-
 import Fastify from "fastify";
+import cors from "@fastify/cors";
+import { postRoutes } from "./routes/post.route";
+import { routes } from "./routes/home.route";
 
 export const app = Fastify({
   logger: {
@@ -22,5 +22,6 @@ app.register(cors, {
 });
 
 app.register(routes);
+app.register(postRoutes);
 
 
