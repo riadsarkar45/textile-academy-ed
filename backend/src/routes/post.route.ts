@@ -1,10 +1,10 @@
 import { FastifyInstance } from "fastify";
-import { createNewMcq } from "../modules/mcq/mcq";
+import { createNewMcq } from "../modules/mcq/add-mcq";
 export const postRoutes = (fastify: FastifyInstance) => {
     fastify.post("/new-mcq", {
         schema: {
             body: {
-                type: "object",
+                type: "array",
                 required: ["question", "correctAnswer", "optionA", "optionB", "optionC", "optionD"],
                 properties: {
                     question: { type: "string", minLength: 1 },

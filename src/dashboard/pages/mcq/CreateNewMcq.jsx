@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Papa from "papaparse";
 import validateMcq from "../../validations/ValidateMCQCsv";
+import useAxiosPublic from "../../../hooks/Axios";
 
 const CreateNewMcq = () => {
     const [mcqs, setMcqs] = useState([]);
     const [error, setError] = useState("");
-
+    const axiosPublic = useAxiosPublic();
     // CSV upload
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
@@ -34,7 +35,6 @@ const CreateNewMcq = () => {
             error: () => setError("Failed to parse CSV"),
         });
     };
-
     // option click (question-wise, safe)
     const handleOptionClick = (qIndex, optionLabel) => {
         setMcqs((prev) =>
@@ -45,6 +45,11 @@ const CreateNewMcq = () => {
             )
         );
     };
+
+    const handleMcqUpload = async () => {
+        const upload = await axiosPublic.post("/new-mcq", mcqs)
+        console.log(upload);
+    }
 
     return (
         <div className="bg-gray-100 p-6">
@@ -84,11 +89,10 @@ const CreateNewMcq = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`border rounded-lg p-4 mb-4 ${
-                                        errors.length
-                                            ? "bg-red-50 border-red-400"
-                                            : "bg-gray-50"
-                                    }`}
+                                    className={`border rounded-lg p-4 mb-4 ${errors.length
+                                        ? "bg-red-50 border-red-400"
+                                        : "bg-gray-50"
+                                        }`}
                                 >
                                     <p className="font-medium mb-3">
                                         Q{index + 1}. {mcq.question || "⚠ Missing"}
@@ -139,9 +143,7 @@ const CreateNewMcq = () => {
 
                         <div className="flex justify-end">
                             <button
-                                onClick={() =>
-                                    alert(`Ready to upload ${mcqs.length} MCQs`)
-                                }
+                                onClick={() => handleMcqUpload()}
                                 className="bg-black text-white px-6 py-2 rounded-lg"
                             >
                                 Confirm Upload ({mcqs.length})
@@ -155,4 +157,3 @@ const CreateNewMcq = () => {
 };
 
 export default CreateNewMcq;
- 
