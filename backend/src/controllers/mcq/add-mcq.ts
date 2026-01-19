@@ -1,4 +1,3 @@
-// routes/mcq.ts or wherever your route is
 import { FastifyReply, FastifyRequest } from "fastify";
 import { validateMcq } from "../../utils/mcq.validations";
 

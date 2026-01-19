@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { createNewMcq } from "../modules/mcq/add-mcq";
+import { createNewMcq } from "../controllers/mcq/add-mcq";
 export const postRoutes = (fastify: FastifyInstance) => {
     fastify.post("/new-mcq", {
         schema: {

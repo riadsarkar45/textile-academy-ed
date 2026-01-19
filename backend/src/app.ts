@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { postRoutes } from "./routes/post.route";
 import { routes } from "./routes/home.route";
+import { databaseConnect } from "./database/connect";
 
 export const app = Fastify({
   logger: {
@@ -20,8 +21,8 @@ export const app = Fastify({
 app.register(cors, {
   origin: true
 });
-
 app.register(routes);
 app.register(postRoutes);
+databaseConnect(app)
 
 
