@@ -12,3 +12,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model users {
+  id       Int    @id @default(autoincrement())
+  name     String
+  username String
+  email    String
+  password String
+}
+
+model mcqQuestions {
+  id        Int          @id @default(autoincrement())
+  question  String       @db.Text
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  options   mcqOptions[]
+
+  @@index([isActive])
+  @@map("mcq_questions")
+}
+
+model mcqOptions {
+  id         Int          @id @default(autoincrement())
+  options    String       @db.VarChar(500)
+  isCorrect  Boolean      @default(false)
+  questionId Int
+  question   mcqQuestions @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@unique([questionId, options])
+  @@map("mcq_options")
+}
