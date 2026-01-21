@@ -22,11 +22,11 @@ model users {
 }
 
 model mcqQuestions {
-  id        Int          @id @default(autoincrement())
-  question  String       @db.Text
-  isActive  Boolean      @default(true)
-  createdAt DateTime     @default(now())
-  options   mcqOptions[]
+  id            Int          @id @default(autoincrement())
+  question      String       @db.Text
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  options       mcqOptions[]
 
   @@index([isActive])
   @@map("mcq_questions")
@@ -40,6 +40,5 @@ model mcqOptions {
   question   mcqQuestions @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId])
-  @@unique([questionId, options])
   @@map("mcq_options")
 }
