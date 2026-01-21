@@ -1,5 +1,5 @@
 const validateMcq = (mcq) => {
-  const options = [mcq.optionA, mcq.optionB, mcq.optionC, mcq.optionD];
+  const options = [mcq.optionA, mcq.optionB, mcq.optionC, mcq.optionD, mcq.correctAnswer];
   let errors = [];
 
   if (!mcq.question) errors.push("Question missing");
