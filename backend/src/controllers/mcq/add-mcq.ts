@@ -26,19 +26,14 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
 
       // Remove frontend-only fields
       const cleanMcqs = mcqs.map(({ selectedOption, ...rest }) => rest);
-      console.log(cleanMcqs);
       // Transform to Prisma format
-      const prismaPayload = cleanMcqs.map((mcq) => {
+      const prismaPayload = cleanMcqs.map((mcq) => { 
          const optionMap = {
             A: mcq.optionA,
             B: mcq.optionB,
             C: mcq.optionC,
             D: mcq.optionD,
          };
-         console.log(Object.entries(optionMap).map(([label, text]) => {
-            return {label, text};
-         }));
-         console.log(mcq.correctAnswer, "correct answer");
          return {
             question: mcq.question,
             isActive: true,

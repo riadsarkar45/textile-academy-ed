@@ -1,9 +1,10 @@
 const validateMcq = (mcq) => {
-  const options = [mcq.optionA, mcq.optionB, mcq.optionC, mcq.optionD, mcq.correctAnswer];
+  const options = [mcq.optionA, mcq.optionB, mcq.optionC, mcq.optionD, mcq.correctAnswer, mcq.subject];
   let errors = [];
 
   if (!mcq.question) errors.push("Question missing");
   if (!mcq.correctAnswer) errors.push("Correct answer missing");
+  if (!mcq.subject) errors.push("Subject is required");
   if (options.some(opt => !opt)) errors.push("Option missing");
   if (!options.includes(mcq.correctAnswer))
     errors.push("Correct answer not in options");

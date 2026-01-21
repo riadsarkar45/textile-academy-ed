@@ -20,13 +20,13 @@ const CreateNewMcq = () => {
                     setError("CSV file is empty or invalid");
                     return;
                 }
-
                 const normalized = results.data.map((mcq) => ({
                     ...mcq,
                     correctAnswer: mcq.correctAnswer
                         ? mcq.correctAnswer.trim().toUpperCase()
                         : "",
                     selectedOption: null, // per question state
+                    subject: mcq.subject
                 }));
 
                 setMcqs(normalized);
@@ -50,7 +50,7 @@ const CreateNewMcq = () => {
         const upload = await axiosPublic.post("/new-mcq", mcqs)
         console.log(upload);
     }
-
+    console.log(mcqs);
     return (
         <div className="bg-gray-100 p-6">
             <div className="max-w-6xl mx-auto">
