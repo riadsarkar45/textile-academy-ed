@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { createNewMcq } from "../controllers/mcq/add-mcq";
+import { createNewCommunityPost } from "../controllers/community/createNewPost";
 export const postRoutes = (fastify: FastifyInstance) => {
     fastify.post("/new-mcq", {
         schema: {
@@ -19,4 +20,19 @@ export const postRoutes = (fastify: FastifyInstance) => {
         },
         
     }, createNewMcq)
+
+    fastify.post("/create-post", {
+        schema:{
+            body:{
+                type: "object",
+                required: ["title", "content", "authorId"],
+                properties: {
+                    title: {type: "string"},
+                    content: {type: "string"},
+                    authorId: {type: "string"}
+                },
+                additionalProperties: false,
+            }
+        }
+    }, createNewCommunityPost)
 }

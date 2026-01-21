@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import { postRoutes } from "./routes/post.route";
 import { routes } from "./routes/home.route";
 import { databaseConnect } from "./database/connect";
+import { getRoutes } from "./routes/get.route";
 
 export const app = Fastify({
   logger: {
@@ -23,6 +24,7 @@ app.register(cors, {
 });
 app.register(routes);
 app.register(postRoutes);
+app.register(getRoutes);
 databaseConnect(app)
 
 

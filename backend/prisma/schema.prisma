@@ -52,3 +52,13 @@ model subjects {
 
   @@map("subjects")
 }
+
+model communityPosts {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(200)
+  content   String   @db.Text
+  authorId  Int
+  createdAt DateTime @default(now())
+
+  @@map("community_posts")
+}
