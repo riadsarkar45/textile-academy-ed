@@ -1,10 +1,26 @@
+import { useEffect, useState } from "react";
 import FixedBottomBar from "../../../components/FixedBottomBar";
 import McqExam from "./McqExam";
+import useAxiosPublic from "../../../hooks/Axios";
 
 const Exam = () => {
+    const [examQuestion, setExamQuestion] = useState([])
+    const axiosPublic = useAxiosPublic();
+
+    useEffect(() => {
+        const fetchExamQuestions = async () => {
+            try {
+                const res = await axiosPublic.get("/mcq")
+                setExamQuestion(res.data.mcqs);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchExamQuestions();
+    }, [axiosPublic])
     return (
         <div className="w-[50rem] m-auto">
-            <div className="flex flex-col mb-5 items-center justify-center bg-gray-100 border p-6 rounded-lg">
+            {/* <div className="flex flex-col mb-5 items-center justify-center bg-gray-100 border p-6 rounded-lg">
                 <h2 className="text-2xl">45th Bcs Bangla Written Exam</h2>
                 <small>Time: 1 Hours and 30 Mins</small>
             </div>
@@ -49,10 +65,12 @@ const Exam = () => {
                 <div className="bg-gray-200 rounded-lg p-3">
                     <input type="file" />
                 </div>
+            </div> */}
+
+
+            <div>
+                <McqExam examQuestion={examQuestion} />
             </div>
-
-
-            <McqExam />
             <FixedBottomBar />
         </div>
     );

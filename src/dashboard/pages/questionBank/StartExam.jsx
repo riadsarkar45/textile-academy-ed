@@ -17,7 +17,7 @@ const StartExam = () => {
                         </div>
                     </div>
                     <div className='w-full grid bg-white'>
-                        <Link className='rounded-lg border mb-2 p-4 shadow-md bg-green-900 text-white font-semibold' to="/exam"><span >Start Exam</span></Link>
+                        <Link className='rounded-lg border mb-2 p-4 shadow-md bg-green-900 text-white font-semibold' to="/exam/mcq"><span >Start Exam</span></Link>
                         <button className='rounded-lg border p-4 border-green-900 text-green-900 shadow-md '>See Question Paper</button>
                     </div>
                     <div>

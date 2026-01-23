@@ -7,7 +7,7 @@ const McqQuestions = () => {
         <div className=" w-[50rem] m-auto">
             <h2 className="mb-8">Entrance Exam</h2>
             <div className="grid grid-cols-3 gap-3">
-                <Link to="/live-exam">
+                <Link to="/live-exam/mcq">
                     <div className="border rounded-lg bg-white p-4">
                         <h2 className="mb-3 font-semibold">Physics Written Exam 2016</h2>
                         <div className="flex text-gray-600 gap-2 items-center">

@@ -18,18 +18,18 @@ export const postRoutes = (fastify: FastifyInstance) => {
                 additionalProperties: false,
             }
         },
-        
+
     }, createNewMcq)
 
-    fastify.post("/create-post", {
-        schema:{
-            body:{
+    fastify.post("/create/community/post", {
+        schema: {
+            body: {
                 type: "object",
                 required: ["title", "content", "authorId"],
                 properties: {
-                    title: {type: "string"},
-                    content: {type: "string"},
-                    authorId: {type: "string"}
+                    title: { type: "string" },
+                    content: { type: "string" },
+                    authorId: { type: "string" }
                 },
                 additionalProperties: false,
             }
