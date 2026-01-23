@@ -18,8 +18,13 @@ const Exam = () => {
         }
         fetchExamQuestions();
     }, [axiosPublic])
+
+    const handleResultSubmit = () => {
+        console.log("clicked");
+    }
     return (
         <div className="w-[50rem] m-auto">
+            
             {/* <div className="flex flex-col mb-5 items-center justify-center bg-gray-100 border p-6 rounded-lg">
                 <h2 className="text-2xl">45th Bcs Bangla Written Exam</h2>
                 <small>Time: 1 Hours and 30 Mins</small>
@@ -71,7 +76,7 @@ const Exam = () => {
             <div>
                 <McqExam examQuestion={examQuestion} />
             </div>
-            <FixedBottomBar />
+            <FixedBottomBar buttonAction= {handleResultSubmit} buttonName="See Result" />
         </div>
     );
 };
