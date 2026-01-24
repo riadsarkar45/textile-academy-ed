@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
+import useAxiosPublic from "../../../hooks/Axios";
 
 const McqExam = ({ examQuestion }) => {
     const [selectedOption, setSelectedOption] = useState({});
-    const [result, setResult] = useState({
-        correct: 0,
-        incorrect: 0
-    });
-
-    const handleOptionSelect = (questionId, optionId, isCorrect) => {
+    const [result, setResult] = useState({ correct: 0, incorrect: 0 });
+    const axiosPublic = useAxiosPublic();
+    const handleOptionSelect = async (questionId, optionId, isCorrect) => {
         setSelectedOption(prev => ({
             ...prev,
             [questionId]: { optionId, isCorrect, questionId }
         }));
-    };
 
+        const dataToInsert = {
+            questionId,
+            optionId,
+            isCorrect,
+            userId: 1
+        }
+
+        const res = await axiosPublic.post("/mcq/attempts", dataToInsert)
+        console.log(res.data);
+
+    };
+console.log(selectedOption);
     useEffect(() => {
         let correct = 0;
         let incorrect = 0;

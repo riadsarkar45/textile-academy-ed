@@ -45,6 +45,14 @@ model mcqOptions {
   @@map("mcq_options")
 }
 
+model mcqSubmission {
+  id         Int     @id @default(autoincrement())
+  questionId String
+  optionId   Int
+  isCorrect  Boolean
+  userId     Int
+}
+
 model subjects {
   id           Int            @id @default(autoincrement())
   subjectName  String         @unique @db.VarChar(100)
