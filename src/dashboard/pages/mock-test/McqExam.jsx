@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../../../hooks/Axios";
-
+import { ImCross } from "react-icons/im";
+import { TiTick } from "react-icons/ti";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
+import { Link } from "react-router";
 const McqExam = ({ examQuestion }) => {
     const [selectedOption, setSelectedOption] = useState({});
     const [result, setResult] = useState({ correct: 0, incorrect: 0 });
@@ -53,10 +56,15 @@ const McqExam = ({ examQuestion }) => {
 
     return (
         <div className="w-[50rem] m-auto">
-            <div className="flex gap-2 mb-5 items-center">
-                <h2 className="text-lg font-medium">Result:</h2>
-                <p className="">Correct Answers: {result.correct}</p>
-                <p>Incorrect Answers: {result.incorrect}</p>
+            <div className="flex justify-between gap-2 mb-2 ">
+                <div>
+                    <Link to="/live-exam/mcq"><button className="flex bg-green-500 text-green-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><FaArrowAltCircleLeft /></button></Link>
+                </div>
+                <div className="flex gap-2">
+                    <p className="flex bg-green-500 text-green-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><TiTick /> {result.correct}</p>
+                    <p className="flex bg-red-500 text-red-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><ImCross /> {result.incorrect}</p>
+                </div>
+
             </div>
             <h2>Bangla mcq test</h2>
             {
@@ -73,13 +81,32 @@ const McqExam = ({ examQuestion }) => {
                             <h2 className="mb-4">{qIndex + 1}. {question.question}</h2>
                             <div className="grid grid-cols-2 gap-5 rounded-lg p-3">
                                 {
-                                    question.options?.map((option, oIndex) => (
-                                        <button disabled={Number(question.id) === Number(selectedOpt.questionId)} key={oIndex} onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)} className={
-                                            `${selectedOpt.isCorrect && option.id === selectedOpt.optionId && 'bg-green-500'}
-                                         ${option.id === selectedOpt.optionId && !selectedOpt.isCorrect && 'bg-red-500'} bg-gray-200 p-3 flex ${Number(question.id) === Number(selectedOpt.questionId) && "disabled cursor-not-allowed"} items-start rounded-lg`}>
-                                            {oIndex + 1}. {option.options}
-                                        </button>
-                                    ))
+                                    question.options?.map((option, oIndex) => {
+                                        const isUserAnsweredThisQuestion = Number(question.id) === Number(selectedOpt.questionId);
+                                        const isSelected = option.id === selectedOpt.optionId;
+                                        const isCorrectOption = option.isCorrect;
+                                        const userSelectedWrong = isUserAnsweredThisQuestion && !selectedOpt.isCorrect;
+
+                                        let bgColor = 'bg-gray-200';
+
+                                        if (isSelected) {
+                                            bgColor = selectedOpt.isCorrect ? 'bg-green-500' : 'bg-red-500';
+                                        } else if (userSelectedWrong && isCorrectOption) {
+                                            bgColor = 'bg-green-300'; 
+                                        }
+
+                                        return (
+                                            <button
+                                                key={oIndex}
+                                                disabled={isUserAnsweredThisQuestion}
+                                                onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)}
+                                                className={`${bgColor} p-3 flex items-start rounded-lg cursor-pointer ${isUserAnsweredThisQuestion ? 'cursor-not-allowed opacity-90' : ''
+                                                    }`}
+                                            >
+                                                {oIndex + 1}. {option.options}
+                                            </button>
+                                        );
+                                    })
                                 }
                             </div>
                         </div>
