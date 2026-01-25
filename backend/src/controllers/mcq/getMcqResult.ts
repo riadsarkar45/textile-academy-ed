@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../../database/prisma/prisma";
 
 type Options = {
-    [key: number]: {
+    [key: string]: {
         isCorrect: boolean;
         questionId: string;
         optionId: number;
@@ -24,7 +24,7 @@ export const McqResult = async (req: FastifyRequest, res: FastifyReply) => {
     const options: Options = {};
 
     results.forEach(result => {
-        options[result.optionId] = {
+        options[result.questionId] = {
             isCorrect: result.isCorrect,
             questionId: result.questionId,
             optionId: result.optionId

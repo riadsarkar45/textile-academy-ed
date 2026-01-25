@@ -22,8 +22,9 @@ const McqExam = ({ examQuestion }) => {
         console.log(res.data);
 
     };
-console.log(selectedOption);
     useEffect(() => {
+
+
         let correct = 0;
         let incorrect = 0;
 
@@ -35,7 +36,20 @@ console.log(selectedOption);
         setResult({ correct, incorrect });
     }, [selectedOption]);
 
+    useEffect(() => {
+        const fetchExamQuestions = async () => {
+            try {
+                const res = await axiosPublic.get("/mcq/results")
+                setSelectedOption(res.data.data);
+                console.log(res.data.data, "from server");
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchExamQuestions();
+    }, [])
 
+    console.log("selectedOption", selectedOption);
 
     return (
         <div className="w-[50rem] m-auto">
@@ -53,18 +67,18 @@ console.log(selectedOption);
                             key={qIndex}
                             className={
                                 `${qIndex === examQuestion.length - 1 ? 'mb-[10rem]' : 'mb-2'}
-                                 ${question.id === selectedOpt.questionId ? 'bg-gray-300 bg-opacity-20' : 'bg-white'} p-5 border rounded-lg `
+                                 ${Number(question.id) === Number(selectedOpt.questionId) ? 'bg-gray-300 bg-opacity-20' : 'bg-white'} p-5 border rounded-lg `
                             }
                         >
                             <h2 className="mb-4">{qIndex + 1}. {question.question}</h2>
                             <div className="grid grid-cols-2 gap-5 rounded-lg p-3">
                                 {
                                     question.options?.map((option, oIndex) => (
-                                        <span key={oIndex} onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)} className={
+                                        <button disabled={Number(question.id) === Number(selectedOpt.questionId)} key={oIndex} onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)} className={
                                             `${selectedOpt.isCorrect && option.id === selectedOpt.optionId && 'bg-green-500'}
-                                         ${option.id === selectedOpt.optionId && !selectedOpt.isCorrect && 'bg-red-500'} bg-gray-200 p-3 rounded-lg`}>
+                                         ${option.id === selectedOpt.optionId && !selectedOpt.isCorrect && 'bg-red-500'} bg-gray-200 p-3 flex ${Number(question.id) === Number(selectedOpt.questionId) && "disabled cursor-not-allowed"} items-start rounded-lg`}>
                                             {oIndex + 1}. {option.options}
-                                        </span>
+                                        </button>
                                     ))
                                 }
                             </div>
