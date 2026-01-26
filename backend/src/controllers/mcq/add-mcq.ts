@@ -12,7 +12,22 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
 
       const mcqs = body as Array<Record<string, any>>;
 
-      // Validate each
+      const hasSubjectName = mcqs[0]?.subject || undefined;
+      if (!hasSubjectName || typeof hasSubjectName !== 'string') {
+         return res.status(400).send({ error: "Subject name is required in the first MCQ object" });
+      }
+      let subjectRecord = await prisma.subjects.findUnique({
+         where: { subjectName: hasSubjectName },
+         select: { id: true }
+      });
+
+      if (!subjectRecord) {
+         subjectRecord = await prisma.subjects.create({
+            data: { subjectName: hasSubjectName },
+            select: { id: true }
+         });
+      }
+      const subjectId = subjectRecord.id;
       const validationErrors = [];
       for (let i = 0; i < mcqs.length; i++) {
          const errors = validateMcq(mcqs[i]);
@@ -24,7 +39,6 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          return res.status(400).send({ errors: validationErrors });
       }
 
-      console.log(mcqs);
 
       const prismaPayload = mcqs.map((mcq) => {
          const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const;
@@ -36,6 +50,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          return {
             question: mcq.question,
             isActive: true,
+            subjectId: subjectId,
             options: {
                create: options,
             },
@@ -44,22 +59,22 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
 
       if (prismaPayload.length === 0) return res.status(400).send({ error: "No MCQs to insert" });
 
-      console.log(prismaPayload, "prisma payload");
       const results = await prisma.$transaction(
          prismaPayload.map((data) =>
             prisma.mcqQuestions.create({
                data,
                include: { options: true }
+
             })
          )
       );
 
 
-     return res.status(201).send({
-      message: "MCQs created successfully",
-      count: results.length,
-      data: results,
-    });
+      return res.status(201).send({
+         message: "MCQs created successfully",
+         count: results.length,
+         data: results,
+      });
 
    } catch (err) {
       console.error("Unexpected error:", err);
