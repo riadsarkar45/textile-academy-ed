@@ -13,6 +13,14 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       const mcqs = body as Array<Record<string, any>>;
 
       const hasSubjectName = mcqs[0]?.subject || undefined;
+      const hasDifferentSubjects = mcqs.some(mcq => mcq.subject !== hasSubjectName)
+      if (hasDifferentSubjects) {
+         return res.status(400).send({
+            error: "All MCQs must belong to the same subject",
+            message: "Mixed subjects are not allowed in a single request"
+         });
+      }
+
       if (!hasSubjectName || typeof hasSubjectName !== 'string') {
          return res.status(400).send({ error: "Subject name is required in the first MCQ object" });
       }
