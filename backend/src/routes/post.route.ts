@@ -37,18 +37,33 @@ export const postRoutes = (fastify: FastifyInstance) => {
         }
     }, createNewCommunityPost)
 
-    fastify.post("/mcq/attempts", {
-        schema: {
-            body: {
-                type: "object",
-                required: ["questionId", "optionId", "isCorrect"],
-                properties: {
-                    questionId: { type: "string" },
-                    optionId: { type: "string" },
-                    isCorrect: { type: "boolean" },
-                    userId: { type: "string" }
-                }
-            }
+   fastify.post("/mcq/attempts", {
+  schema: {
+    body: {
+      type: "object",
+      minProperties: 1, // at least one answer
+      patternProperties: {
+        // Keys must be numeric strings (e.g., "101", "102")
+        "^[0-9]+$": {
+          type: "object",
+          required: ["questionId", "optionId", "isCorrect"],
+          properties: {
+            questionId: { 
+              // Must match the key (e.g., key "101" → questionId: "101")
+              type: "string",
+              pattern: "^[0-9]+$"
+            },
+            optionId: { 
+              type: "string", // or "integer" if you change frontend to send numbers
+              pattern: "^[0-9]+$"
+            },
+            isCorrect: { type: "boolean" }
+          },
+          additionalProperties: false
         }
-    }, mcqAttemptsController);
+      },
+      additionalProperties: false
+    }
+  }
+}, mcqAttemptsController);
 }

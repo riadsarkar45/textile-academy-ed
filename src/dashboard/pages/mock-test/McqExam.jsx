@@ -4,8 +4,8 @@ import { ImCross } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { Link } from "react-router";
-const McqExam = ({ examQuestion }) => {
-    const [selectedOption, setSelectedOption] = useState({});
+const McqExam = ({ examQuestion, setSelectedOption,selectedOption }) => {
+    // const [selectedOption, setSelectedOption] = useState({});
     const [result, setResult] = useState({ correct: 0, incorrect: 0 });
     const axiosPublic = useAxiosPublic();
     const handleOptionSelect = async (questionId, optionId, isCorrect) => {
@@ -14,17 +14,8 @@ const McqExam = ({ examQuestion }) => {
             [questionId]: { optionId, isCorrect, questionId }
         }));
 
-        const dataToInsert = {
-            questionId,
-            optionId,
-            isCorrect,
-            userId: 1
-        }
-
-        const res = await axiosPublic.post("/mcq/attempts", dataToInsert)
-        console.log(res.data);
-
     };
+    console.log(selectedOption);
     useEffect(() => {
 
 
@@ -82,23 +73,15 @@ const McqExam = ({ examQuestion }) => {
                                     question.options?.map((option, oIndex) => {
                                         const isUserAnsweredThisQuestion = Number(question.id) === Number(selectedOpt.questionId);
                                         const isSelected = option.id === selectedOpt.optionId;
-                                        const isCorrectOption = option.isCorrect;
-                                        const userSelectedWrong = isUserAnsweredThisQuestion && !selectedOpt.isCorrect;
-
-                                        let bgColor = 'bg-gray-200';
-
-                                        if (isSelected) {
-                                            bgColor = selectedOpt.isCorrect ? 'bg-green-500' : 'bg-red-500';
-                                        } else if (userSelectedWrong && isCorrectOption) {
-                                            bgColor = 'bg-green-300'; 
-                                        }
+                                        // const isCorrectOption = option.isCorrect;
+                                        // const userSelectedWrong = isUserAnsweredThisQuestion && !selectedOpt.isCorrect;
 
                                         return (
                                             <button
                                                 key={oIndex}
                                                 disabled={isUserAnsweredThisQuestion}
                                                 onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)}
-                                                className={`${bgColor} p-3 flex items-start rounded-lg  ${isUserAnsweredThisQuestion ? 'cursor-not-allowed' : 'cursor-pointer'
+                                                className={` ${isSelected && 'bg-yellow-200'} bg-gray-300 p-3 flex items-start rounded-lg  ${isUserAnsweredThisQuestion ? 'cursor-not-allowed' : 'cursor-pointer'
                                                     }`}
                                             >
                                                 {oIndex + 1}. {option.options}

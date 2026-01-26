@@ -2,36 +2,23 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../../database/prisma/prisma";
 
 export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyReply) => {
-    const { questionId, optionId, isCorrect, userId } = req.body as { questionId: string, optionId: string, isCorrect: boolean, userId: number };
-    const stringUserIdToNumber = Number(userId)
-    const stringOptionIdToNumber = Number(optionId)
+  const userId = 1;
+  const answers = req.body as Record<string, { optionId: string; isCorrect: boolean }>;
 
-    const ifExist = await prisma.mcqSubmission.findFirst(
-        {
-            where: {
-                userId: stringUserIdToNumber,
-                questionId: questionId,
-            }
-        }
-    )
-    if (ifExist) {
-        return res.status(403).send({ message: "Already answered" })
-    }
+  try {
+    const records = Object.entries(answers).map(([questionId, answer]) => ({
+      userId,
+      questionId,
+      optionId: parseInt(answer.optionId, 10),
+      isCorrect: answer.isCorrect,
+    }));
 
-    const insertUserSubmission = await prisma.mcqSubmission.create(
-        {
-            data: {
-                questionId: questionId,
-                optionId: stringOptionIdToNumber,
-                isCorrect: isCorrect,
-                userId: stringUserIdToNumber
-            }
-        }
-    )
+    // ✅ Use 'data', and pass the array
+    await prisma.mcqSubmission.createMany({ data: records });
 
-    if (!insertUserSubmission) {
-        return res.status(403).send({ message: "Submission Failed" })
-    }
-
-    res.status(200).send({ message: "Submission saved." })
-}
+    return res.status(201).send({ message: "Saved", count: records.length });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Save failed" });
+  }
+};
