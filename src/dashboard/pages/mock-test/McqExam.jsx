@@ -44,7 +44,6 @@ const McqExam = ({ examQuestion }) => {
             try {
                 const res = await axiosPublic.get("/mcq/results")
                 setSelectedOption(res.data.data);
-                console.log(res.data.data, "from server");
             } catch (err) {
                 console.log(err);
             }
@@ -52,7 +51,6 @@ const McqExam = ({ examQuestion }) => {
         fetchExamQuestions();
     }, [])
 
-    console.log("selectedOption", selectedOption);
 
     return (
         <div className="w-[50rem] m-auto">
@@ -100,7 +98,7 @@ const McqExam = ({ examQuestion }) => {
                                                 key={oIndex}
                                                 disabled={isUserAnsweredThisQuestion}
                                                 onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)}
-                                                className={`${bgColor} p-3 flex items-start rounded-lg cursor-pointer ${isUserAnsweredThisQuestion ? 'cursor-not-allowed opacity-90' : ''
+                                                className={`${bgColor} p-3 flex items-start rounded-lg  ${isUserAnsweredThisQuestion ? 'cursor-not-allowed' : 'cursor-pointer'
                                                     }`}
                                             >
                                                 {oIndex + 1}. {option.options}

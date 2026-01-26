@@ -25,7 +25,6 @@ const CreateNewMcq = () => {
                     correctAnswer: mcq.correctAnswer
                         ? mcq.correctAnswer.trim().toUpperCase()
                         : "",
-                    selectedOption: null, // per question state
                     subject: mcq.subject
                 }));
 
@@ -36,19 +35,11 @@ const CreateNewMcq = () => {
         });
     };
     // option click (question-wise, safe)
-    const handleOptionClick = (qIndex, optionLabel) => {
-        setMcqs((prev) =>
-            prev.map((mcq, index) =>
-                index === qIndex
-                    ? { ...mcq, selectedOption: optionLabel }
-                    : mcq
-            )
-        );
-    };
+   
 
     const handleMcqUpload = async () => {
         const upload = await axiosPublic.post("/new-mcq", mcqs)
-        console.log(upload);
+        console.log(upload.data);
     }
     console.log(mcqs);
     return (
@@ -104,21 +95,12 @@ const CreateNewMcq = () => {
                                             const optionText = mcq[`option${label}`];
                                             let bg = "bg-gray-200";
 
-                                            // color logic (CORRECT)
-                                            if (mcq.selectedOption !== null) {
-                                                if (label === mcq.correctAnswer) {
-                                                    bg = "bg-green-300";
-                                                } else if (label === mcq.selectedOption) {
-                                                    bg = "bg-red-300";
-                                                }
-                                            }
+                                            
 
                                             return (
                                                 <button
                                                     key={label}
-                                                    onClick={() =>
-                                                        handleOptionClick(index, label)
-                                                    }
+                                                    
                                                     className={`${bg} p-2 rounded-md text-left transition`}
                                                 >
                                                     <b>{label}.</b>{" "}

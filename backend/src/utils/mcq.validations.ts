@@ -13,8 +13,18 @@ export const validateMcq = (mcq: any): string[] => {
     errors.push("Correct ans is missing.");
   }
 
-  const options = [mcq.optionA, mcq.optionB, mcq.optionC, mcq.optionD, mcq.correctAnswer];
-  
+  const options = [mcq.optionA, mcq.optionB, mcq.optionC, mcq.optionD];
+  if (!options.includes(mcq.correctAnswer)) errors.push("Correct answer not in options");
+  const seen = new Set<string>();
+  for (const opt of options) {
+    const val = opt.trim();
+    if (seen.has(val)) {
+      errors.push(`Duplicate option found: '${val}'`);
+      break; // stop at first duplicate
+    }
+    seen.add(val);
+  }
+
   if (options.some(opt => opt === null || opt === undefined || opt === '')) {
     errors.push("Option missing.");
   }

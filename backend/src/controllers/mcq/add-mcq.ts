@@ -24,39 +24,42 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          return res.status(400).send({ errors: validationErrors });
       }
 
-      // Remove frontend-only fields
-      const cleanMcqs = mcqs.map(({ selectedOption, ...rest }) => rest);
-      // Transform to Prisma format
-      const prismaPayload = cleanMcqs.map((mcq) => { 
-         const optionMap = {
-            A: mcq.optionA,
-            B: mcq.optionB,
-            C: mcq.optionC,
-            D: mcq.optionD,
-         };
+      console.log(mcqs);
+
+      const prismaPayload = mcqs.map((mcq) => {
+         const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const;
+         const options = OPTION_LABELS.map((label) => ({
+            options: mcq[`option${label}`],
+            isCorrect: mcq.correctAnswer === mcq[`option${label}`],
+         }));
+
          return {
             question: mcq.question,
             isActive: true,
             options: {
-               create: Object.entries(optionMap).map(([label, text]) => ({
-                  options: text,
-                  isCorrect: label === mcq.correctAnswer,
-               })),
+               create: options,
             },
-         };
-      });
+         }
+      })
 
-      // Save
-      await prisma.$transaction(
+      if (prismaPayload.length === 0) return res.status(400).send({ error: "No MCQs to insert" });
+
+      console.log(prismaPayload, "prisma payload");
+      const results = await prisma.$transaction(
          prismaPayload.map((data) =>
-            prisma.mcqQuestions.create({ data })
+            prisma.mcqQuestions.create({
+               data,
+               include: { options: true }
+            })
          )
       );
 
-      return res.status(201).send({
-         message: "MCQs created successfully",
-         count: prismaPayload.length,
-      });
+
+     return res.status(201).send({
+      message: "MCQs created successfully",
+      count: results.length,
+      data: results,
+    });
 
    } catch (err) {
       console.error("Unexpected error:", err);
