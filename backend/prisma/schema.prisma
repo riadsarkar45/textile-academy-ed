@@ -22,16 +22,26 @@ model users {
 }
 
 model mcqQuestions {
-  id        Int          @id @default(autoincrement())
-  question  String       @db.Text
-  isActive  Boolean      @default(true)
-  createdAt DateTime     @default(now())
-  subjectId Int?
-  options   mcqOptions[]
-  subjects  subjects?    @relation(fields: [subjectId], references: [id])
+  id        Int      @id @default(autoincrement())
+  question  String   @db.Text
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  subjectId      Int?
+  questionYearId Int?
+
+  options      mcqOptions[]
+  subjects     subjects?     @relation(fields: [subjectId], references: [id])
+  questionYear questionYear? @relation(fields: [questionYearId], references: [id], onDelete: Cascade)
 
   @@index([isActive])
   @@map("mcq_questions")
+}
+
+model questionYear {
+  id           Int            @id @default(autoincrement())
+  year         String         @unique @db.VarChar(4)
+  mcqQuestions mcqQuestions[]
 }
 
 model mcqOptions {

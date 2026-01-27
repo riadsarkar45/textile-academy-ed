@@ -11,8 +11,9 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       }
 
       const mcqs = body as Array<Record<string, any>>;
-
+      console.log(mcqs);
       const hasSubjectName = mcqs[0]?.subject || undefined;
+      const year = mcqs[0]?.year || undefined;
       const hasDifferentSubjects = mcqs.some(mcq => mcq.subject !== hasSubjectName)
       if (hasDifferentSubjects) {
          return res.status(400).send({
@@ -29,6 +30,20 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          select: { id: true }
       });
 
+      let yearRecord = await prisma.questionYear.findUnique(
+         {
+            where: { year: year },
+            select: { id: true }
+         }
+      )
+
+      if(!yearRecord){
+         yearRecord = await prisma.questionYear.create({
+            data: { year: year },
+            select: { id: true }
+         });
+      }
+
       if (!subjectRecord) {
          subjectRecord = await prisma.subjects.create({
             data: { subjectName: hasSubjectName },
@@ -36,6 +51,8 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          });
       }
       const subjectId = subjectRecord.id;
+      const yearId = yearRecord.id;
+
       const validationErrors = [];
       for (let i = 0; i < mcqs.length; i++) {
          const errors = validateMcq(mcqs[i]);
@@ -59,6 +76,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
             question: mcq.question,
             isActive: true,
             subjectId: subjectId,
+            questionYearId: yearId,
             options: {
                create: options,
             },

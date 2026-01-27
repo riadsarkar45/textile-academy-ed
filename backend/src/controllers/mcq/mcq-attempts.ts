@@ -13,7 +13,6 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
       isCorrect: answer.isCorrect,
     }));
 
-    // ✅ Use 'data', and pass the array
     await prisma.mcqSubmission.createMany({ data: records });
 
     return res.status(201).send({ message: "Saved", count: records.length });
