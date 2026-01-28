@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { getComPosts } from "../controllers/community/getComPosts";
 import { getMcqs } from "../controllers/mcq/getMcq";
 import { McqResult } from "../controllers/mcq/getMcqResult";
+import { allSubjects } from "../controllers/subjects/all-subjects";
 
 export const getRoutes = async (fastify: FastifyInstance) => {
     fastify.get("/community/posts", {
@@ -31,4 +32,6 @@ export const getRoutes = async (fastify: FastifyInstance) => {
         //     }
         // }
     }, McqResult)
+
+    fastify.get("/subjects", allSubjects)
 }

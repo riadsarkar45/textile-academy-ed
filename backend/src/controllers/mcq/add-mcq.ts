@@ -11,9 +11,9 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       }
 
       const mcqs = body as Array<Record<string, any>>;
-      console.log(mcqs);
       const hasSubjectName = mcqs[0]?.subject || undefined;
       const year = mcqs[0]?.year || undefined;
+      const examTitle = mcqs[0]?.examTitle || "No title found";
       const hasDifferentSubjects = mcqs.some(mcq => mcq.subject !== hasSubjectName)
       if (hasDifferentSubjects) {
          return res.status(400).send({
@@ -30,19 +30,13 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          select: { id: true }
       });
 
-      let yearRecord = await prisma.questionYear.findUnique(
-         {
-            where: { year: year },
-            select: { id: true }
-         }
-      )
-
-      if(!yearRecord){
-         yearRecord = await prisma.questionYear.create({
-            data: { year: year },
-            select: { id: true }
-         });
-      }
+      const yearRecord = await prisma.questionYear.create({
+         data: {
+            year: year,
+            examTitle: examTitle 
+         },
+         select: { id: true }
+      });
 
       if (!subjectRecord) {
          subjectRecord = await prisma.subjects.create({
@@ -68,8 +62,8 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       const prismaPayload = mcqs.map((mcq) => {
          const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const;
          const options = OPTION_LABELS.map((label) => ({
-            options: mcq[`option${label}`],
-            isCorrect: mcq.correctAnswer === mcq[`option${label}`],
+            options: mcq[`option${label}`].trim(),
+            isCorrect: mcq.correctAnswer.trim().toLowerCase() === mcq[`option${label}`].trim().toLowerCase(),
          }));
 
          return {

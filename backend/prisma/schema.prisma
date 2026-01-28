@@ -40,7 +40,8 @@ model mcqQuestions {
 
 model questionYear {
   id           Int            @id @default(autoincrement())
-  year         String         @unique @db.VarChar(4)
+  examTitle    String         @db.VarChar(100)
+  year         String         @db.VarChar(4)
   mcqQuestions mcqQuestions[]
 }
 

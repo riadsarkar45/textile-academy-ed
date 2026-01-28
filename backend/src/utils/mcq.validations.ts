@@ -9,6 +9,7 @@ export const validateMcq = (mcq: any): string[] => {
   // Trim all fields
   const question = mcq.question?.trim() || '';
   const correctAnswer = mcq.correctAnswer?.trim() || '';
+  const examTitle = mcq.examTitle?.trim() || '';
   const optionA = mcq.optionA?.trim() || '';
   const optionB = mcq.optionB?.trim() || '';
   const optionC = mcq.optionC?.trim() || '';
@@ -17,6 +18,7 @@ export const validateMcq = (mcq: any): string[] => {
   const options = [optionA, optionB, optionC, optionD];
 
   // Required fields
+  if (!examTitle) errors.push("Exam title is missing.");
   if (!question) errors.push("Question is missing.");
   if (!correctAnswer) errors.push("Correct answer is missing.");
 

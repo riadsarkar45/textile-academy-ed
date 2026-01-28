@@ -7,7 +7,7 @@ export const postRoutes = (fastify: FastifyInstance) => {
     schema: {
       body: {
         type: "array",
-        required: ["question", "correctAnswer", "optionA", "optionB", "optionC", "optionD", "year"],
+        required: ["question", "correctAnswer", "optionA", "optionB", "optionC", "optionD", "year", "examTitle"],
         properties: {
           question: { type: "string", minLength: 1 },
           optionA: { type: "string", minLength: 1 },
@@ -15,6 +15,7 @@ export const postRoutes = (fastify: FastifyInstance) => {
           optionC: { type: "string", minLength: 1 },
           optionD: { type: "string", minLength: 1 },
           year: { type: "string", minLength: 1 },
+          examTitle: { type: "string", minLength: 1 },
           correctAnswer: { type: "string", minLength: 1 },
         },
         additionalProperties: false,
