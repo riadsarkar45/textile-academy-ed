@@ -1,26 +1,38 @@
 const validateMcq = (mcq) => {
   let errors = [];
 
-  // Required fields
-  if (!mcq.question || !mcq.question.trim()) errors.push("Question missing");
-  if (!mcq.correctAnswer || !mcq.correctAnswer.trim()) errors.push("Correct answer missing");
-  if (!mcq.subject || !mcq.subject.trim()) errors.push("Subject is required");
+  // Trim all fields first
+  const question = mcq.question?.trim();
+  const correctAnswer = mcq.correctAnswer?.trim();
+  const subject = mcq.subject?.trim();
+  const optionA = mcq.optionA?.trim();
+  const optionB = mcq.optionB?.trim();
+  const optionC = mcq.optionC?.trim();
+  const optionD = mcq.optionD?.trim();
 
-  // Only the 4 options
-  const options = [mcq.optionA, mcq.optionB, mcq.optionC, mcq.optionD];
+  // Required fields
+  if (!question) errors.push("Question missing");
+  if (!correctAnswer) errors.push("Correct answer missing");
+  if (!subject) errors.push("Subject is required");
+
+  // Options array
+  const options = [optionA, optionB, optionC, optionD];
 
   // Check for missing option
-  if (options.some(opt => !opt || !opt.trim())) errors.push("Option missing");
+  if (options.some(opt => !opt)) errors.push("Option missing");
 
-  // Correct answer must be in options
-  if (!options.includes(mcq.correctAnswer)) errors.push("Correct answer not in options");
+  // Correct answer must be in options (ignoring spaces and case)
+  const lowerOptions = options.map(opt => opt.toLowerCase());
+  if (!lowerOptions.includes(correctAnswer.toLowerCase())) {
+    errors.push("Correct answer not in options");
+  }
 
-  // Check duplicates among options only
+  // Check for duplicate options (ignoring case and spaces)
   const seen = new Set();
   for (const opt of options) {
-    const val = opt.trim();
+    const val = opt.toLowerCase();
     if (seen.has(val)) {
-      errors.push(`Duplicate option found: '${val}'`);
+      errors.push(`Duplicate option found: '${opt}'`);
       break; // stop at first duplicate
     }
     seen.add(val);

@@ -7,7 +7,6 @@ const Exam = () => {
     const [examQuestion, setExamQuestion] = useState([])
     const [selectedOption, setSelectedOption] = useState({});
     const axiosPublic = useAxiosPublic();
-    console.log(selectedOption, "submitted");
     useEffect(() => {
         const fetchExamQuestions = async () => {
             try {
@@ -24,12 +23,16 @@ const Exam = () => {
         console.log(selectedOption, "submitting");
 
         const res = await axiosPublic.post("/mcq/attempts", selectedOption)
-        console.log(res.data);
+        console.log(res.status);
+        if (res.status === 201) {
+            const examResult = await axiosPublic("/mcq/results")
+        }
     }
     return (
         <div className="w-[50rem] m-auto">
 
-            {/* <div className="flex flex-col mb-5 items-center justify-center bg-gray-100 border p-6 rounded-lg">
+            <div>
+                {/* <div className="flex flex-col mb-5 items-center justify-center bg-gray-100 border p-6 rounded-lg">
                 <h2 className="text-2xl">45th Bcs Bangla Written Exam</h2>
                 <small>Time: 1 Hours and 30 Mins</small>
             </div>
@@ -76,6 +79,7 @@ const Exam = () => {
                 </div>
             </div> */}
 
+            </div>
 
             <div>
                 <McqExam selectedOption={selectedOption} setSelectedOption={setSelectedOption} examQuestion={examQuestion} />

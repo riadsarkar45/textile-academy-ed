@@ -35,7 +35,7 @@ const CreateNewMcq = () => {
         });
     };
     // option click (question-wise, safe)
-   
+   console.log(mcqs);
 
     const handleMcqUpload = async () => {
         const upload = await axiosPublic.post("/new-mcq", mcqs)

@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
-import useAxiosPublic from "../../../hooks/Axios";
 import { ImCross } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { Link } from "react-router";
 const McqExam = ({ examQuestion, setSelectedOption,selectedOption }) => {
     // const [selectedOption, setSelectedOption] = useState({});
-    const [result, setResult] = useState({ correct: 0, incorrect: 0 });
-    const axiosPublic = useAxiosPublic();
     const handleOptionSelect = async (questionId, optionId, isCorrect) => {
         setSelectedOption(prev => ({
             ...prev,
@@ -16,31 +12,7 @@ const McqExam = ({ examQuestion, setSelectedOption,selectedOption }) => {
 
     };
     console.log(selectedOption);
-    useEffect(() => {
 
-
-        let correct = 0;
-        let incorrect = 0;
-
-        Object.values(selectedOption).forEach(ans => {
-            if (ans.isCorrect) correct++;
-            else incorrect++;
-        });
-
-        setResult({ correct, incorrect });
-    }, [selectedOption]);
-
-    useEffect(() => {
-        const fetchExamQuestions = async () => {
-            try {
-                const res = await axiosPublic.get("/mcq/results")
-                setSelectedOption(res.data.data);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        fetchExamQuestions();
-    }, [])
 
 
     return (
@@ -50,8 +22,8 @@ const McqExam = ({ examQuestion, setSelectedOption,selectedOption }) => {
                     <Link to="/live-exam/mcq"><button className="flex bg-green-500 text-green-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><FaArrowAltCircleLeft /></button></Link>
                 </div>
                 <div className="flex gap-2">
-                    <p className="flex bg-green-500 text-green-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><TiTick /> {result.correct}</p>
-                    <p className="flex bg-red-500 text-red-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><ImCross /> {result.incorrect}</p>
+                    <p className="flex bg-green-500 text-green-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><TiTick /> </p>
+                    <p className="flex bg-red-500 text-red-600 bg-opacity-15 p-2 border rounded-lg items-center gap-2"><ImCross /> </p>
                 </div>
 
             </div>
