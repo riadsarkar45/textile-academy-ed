@@ -37,7 +37,7 @@ const Routes = createBrowserRouter(
                     element: <QuestionBank />
                 },
                 {
-                    path: '/question-bank/mcq-questions',
+                    path: '/question-bank/exam/:subjectId',
                     element: <McqQuestions />
                 },
                 {

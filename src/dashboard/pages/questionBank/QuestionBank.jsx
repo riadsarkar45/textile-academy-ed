@@ -2,29 +2,44 @@ import { GiGears, GiMaterialsScience, GiOfficeChair, GiEmptyMetalBucket, GiSewin
 import { TbNeedleThread } from "react-icons/tb";
 import { MdRollerShades } from "react-icons/md";
 import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import useAxiosPublic from "../../../hooks/Axios";
 const QuestionBank = () => {
-const diplomaSubjects = [
-        { name: "Introduction", icon: GiMaterialsScience },
-        { name: "Basic Spinning", icon: GiSpinningWheel },
-        { name: "Weaving Basics", icon: MdRollerShades },
-        { name: "Knitting Basics", icon: TbNeedleThread },
-        { name: "Basic Dyeing", icon: GiEmptyMetalBucket },
-        { name: "Fabric Testing", icon: GiTestTubes },
-        { name: "Garment Manu", icon: GiSewingMachine },
-        { name: "Tex Calculations", icon: GiGears },
-        { name: "Practice / Lab", icon: GiOfficeChair },
-        { name: "Industrial Safety", icon: GiVintageRobot }
-    ];    return (
-        <div className="w-[50rem] m-auto">
+    const [subjects, setSubjects] = useState([])
+    const axiosPublic = useAxiosPublic();
+    useEffect(() => {
+        const fetchSubjects = async () => {
+            try {
+                const res = await axiosPublic.get("/subjects")
+                setSubjects(res.data.data);
+                console.log(res.data.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchSubjects();
+    }, [axiosPublic])
+
+    return (
+        <div className="w-[55rem] m-auto">
             <h2 className="mb-8">Question Bank</h2>
             <div className="grid grid-cols-3 gap-4">
                 {
-                    diplomaSubjects.map((exams, i) =>
+                    subjects?.map((sub, i) => {
+                        return (
+                            <Link to={`/question-bank/exam/${sub.id}`} key={i}>
+                                <h2 key={i} className="bg-gray-100 p-2 h-[8rem] font-serif rounded-lg flex items-center justify-center text-2xl border border-gray-200 cursor-pointer hover:bg-white">{sub.subjectName}</h2>
+                            </Link>
+                        )
+                    })
+                }
+                {/* {
+                    subjects?.map((exams, i) =>
                         <Link to="/question-bank/mcq-questions" key={i}>
-                            <h2 key={i} className="bg-gray-100 p-5 h-[8rem] font-serif rounded-lg flex items-center justify-center text-2xl border border-gray-200 cursor-pointer hover:bg-white">{<exams.icon/>}  {exams.name}</h2>
+                            <h2 key={i} className="bg-gray-100 p-5 h-[8rem] font-serif rounded-lg flex items-center justify-center text-2xl border border-gray-200 cursor-pointer hover:bg-white">{<exams.icon />}</h2>
                         </Link>
                     )
-                }
+                } */}
             </div>
         </div>
     );

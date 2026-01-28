@@ -9,8 +9,10 @@ const validateMcq = (mcq) => {
   const optionB = mcq.optionB?.trim();
   const optionC = mcq.optionC?.trim();
   const optionD = mcq.optionD?.trim();
+  const examTitle = mcq.examTitle?.trim();
 
   // Required fields
+  if (!examTitle) errors.push("Exam title is missing");
   if (!question) errors.push("Question missing");
   if (!correctAnswer) errors.push("Correct answer missing");
   if (!subject) errors.push("Subject is required");
