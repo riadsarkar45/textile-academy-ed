@@ -3,10 +3,13 @@ import prisma from "../../database/prisma/prisma";
 
 export const getMcqs = async (req: FastifyRequest, res: FastifyReply) => {
     try {
+        const { subjectId, yearId } = req.params as { subjectId: number, yearId: number }
+        const convertSubjectIdToNumber = Number(subjectId)
+        const convertYearIdToNumber = Number(yearId)
         const getMcqs = await prisma.mcqQuestions.findMany(
             {
-                where: { isActive: true },
-        
+                where: { subjectId: convertSubjectIdToNumber, questionYearId: convertYearIdToNumber, isActive: true },
+
                 select: {
                     question: true,
                     options: true,

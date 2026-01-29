@@ -41,11 +41,11 @@ const Routes = createBrowserRouter(
                     element: <McqQuestions />
                 },
                 {
-                    path: '/live-exam/mcq/:subjectId',
+                    path: '/live-exam/mcq/:subjectId/:yearId',
                     element: <StartExam />
                 },
                 {
-                    path: '/exam/mcq/:subjectId',
+                    path: '/exam/mcq/:subjectId/:yearId',
                     element: <Exam />
                 }
             ]

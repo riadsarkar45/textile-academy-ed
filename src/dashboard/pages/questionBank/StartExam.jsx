@@ -2,8 +2,25 @@ import { CiStopwatch } from 'react-icons/ci';
 import { FaRegEdit } from 'react-icons/fa';
 import profileImage from '../../../assets/Generated Image August 31, 2025 - 7_52PM.jpeg';
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import useAxiosPublic from '../../../hooks/Axios';
 const StartExam = () => {
+    const [attempts, setAttempts] = useState([])
+    const { subjectId, yearId } = useParams()
+    const axiosPublic = useAxiosPublic();
+    console.log(subjectId);
+    useEffect(() => {
+        const fetchAttempts = async () => {
+            try {
+                const res = await axiosPublic.get(`/attempts-history/${subjectId}`)
+                setAttempts(res.data.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchAttempts();
+    }, [axiosPublic, subjectId])
     return (
         <div className='w-[50rem] m-auto'>
             <h2 className='mb-8'>Live Exam</h2>
@@ -17,39 +34,37 @@ const StartExam = () => {
                         </div>
                     </div>
                     <div className='w-full grid bg-white'>
-                        <Link className='rounded-lg border mb-2 p-4 shadow-md bg-green-900 text-white font-semibold' to="/exam/mcq"><span >Start Exam</span></Link>
+                        <Link className='rounded-lg border mb-2 p-4 shadow-md bg-green-900 text-white font-semibold' to={`/exam/mcq/${subjectId}/${yearId}`}><span >Start Exam</span></Link>
                         <button className='rounded-lg border p-4 border-green-900 text-green-900 shadow-md '>See Question Paper</button>
                     </div>
                     <div>
                         <h2 className='mt-6 mb-3'>Previous Attempts</h2>
                         <div>
-                            <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
-                                <div className='grid '>
-                                    <span className=''>Attempt 1</span>
-                                    <small>12 January, 2026</small>
-                                </div>
+                            {
+                                attempts?.map((attempt, i) => {
+                                    return (
+                                        <div key={i} className='flex bg-white border p-5 rounded-lg items-center mb-1'>
+                                            <div className='grid '>
+                                                <span className=''> {i + 1}. Attempt</span>
+                                                <div className='flex gap-2 items-center'>
+                                                    <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-green-500">
+                                                        {attempt.correctAns}
+                                                    </span>
+                                                    <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-red-500">
+                                                        {attempt.wrongAns}
+                                                    </span>
 
-                                {/* push to right */}
-                                <span className='ml-auto'>#1</span>
-                            </div>
-                            <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
-                                <div className='grid '>
-                                    <span className=''>Attempt 1</span>
-                                    <small>12 January, 2026</small>
-                                </div>
+                                                </div>
+                                                <small>12 January, 2026</small>
+                                            </div>
 
-                                {/* push to right */}
-                                <span className='ml-auto'>#1</span>
-                            </div>
-                            <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
-                                <div className='grid '>
-                                    <span className=''>Attempt 1</span>
-                                    <small>12 January, 2026</small>
-                                </div>
+                                            {/* push to right */}
+                                            <span className='ml-auto'>#1</span>
+                                        </div>
+                                    )
+                                })
+                            }
 
-                                {/* push to right */}
-                                <span className='ml-auto'>#1</span>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -38,6 +38,7 @@ const CreateNewMcq = () => {
    console.log(mcqs);
 
     const handleMcqUpload = async () => {
+        console.log({message: "creating..."});
         const upload = await axiosPublic.post("/new-mcq", mcqs)
         console.log(upload.data);
     }

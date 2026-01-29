@@ -2,29 +2,31 @@ import { useEffect, useState } from "react";
 import FixedBottomBar from "../../../components/FixedBottomBar";
 import McqExam from "./McqExam";
 import useAxiosPublic from "../../../hooks/Axios";
+import { useParams } from "react-router";
 
 const Exam = () => {
     const [examQuestion, setExamQuestion] = useState([])
     const [selectedOption, setSelectedOption] = useState({});
     const [fetchedResult, setFetchedResult] = useState({})
     const [mcqResultSummary, setMcqResultSummary] = useState({})
+    const { subjectId, yearId } = useParams()
     const axiosPublic = useAxiosPublic();
     useEffect(() => {
         const fetchExamQuestions = async () => {
             try {
-                const res = await axiosPublic.get(`/mcq`)
+                const res = await axiosPublic.get(`/mcq/${subjectId}/${yearId}`)
                 setExamQuestion(res.data.mcqs);
             } catch (err) {
                 console.log(err);
             }
         }
         fetchExamQuestions();
-    }, [axiosPublic])
+    }, [axiosPublic, subjectId, yearId])
 
     const handleResultSubmit = async () => {
         console.log(selectedOption, "submitting");
 
-        const res = await axiosPublic.post("/mcq/attempts", selectedOption)
+        const res = await axiosPublic.post(`/mcq/attempts/${subjectId}`, selectedOption)
         if (res.status === 201) {
             setSelectedOption({})
             if (res.data.lastSubmittedOption.length !== 0) {
@@ -94,7 +96,7 @@ const Exam = () => {
                     setSelectedOption={setSelectedOption}
                     examQuestion={examQuestion}
                     fetchedResult={fetchedResult}
-                    mcqResultSummary = {mcqResultSummary}
+                    mcqResultSummary={mcqResultSummary}
                 />
             </div>
             {Object.keys(fetchedResult).length === 0 && (

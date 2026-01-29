@@ -39,7 +39,7 @@ export const postRoutes = (fastify: FastifyInstance) => {
     }
   }, createNewCommunityPost)
 
-  fastify.post("/mcq/attempts", {
+  fastify.post("/mcq/attempts/:subjectId", {
     schema: {
       body: {
         type: "object",

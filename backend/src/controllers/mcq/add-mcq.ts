@@ -30,14 +30,6 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          select: { id: true }
       });
 
-      const yearRecord = await prisma.questionYear.create({
-         data: {
-            year: year,
-            examTitle: examTitle 
-         },
-         select: { id: true }
-      });
-
       if (!subjectRecord) {
          subjectRecord = await prisma.subjects.create({
             data: { subjectName: hasSubjectName },
@@ -45,6 +37,15 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          });
       }
       const subjectId = subjectRecord.id;
+
+      const yearRecord = await prisma.questionYear.create({
+         data: {
+            year: year,
+            subjectId: subjectRecord.id,
+            examTitle: examTitle
+         },
+         select: { id: true }
+      });
       const yearId = yearRecord.id;
 
       const validationErrors = [];

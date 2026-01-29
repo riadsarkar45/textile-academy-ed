@@ -5,12 +5,15 @@ import { mcqResults } from "../../utils/mcq-results";
 export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyReply) => {
   const userId = 1;
   const answers = req.body as Record<string, { optionId: string; isCorrect: boolean }>;
-
+  const { subjectId } = req.params as { subjectId: number }
+  const subjectIdToNumber = Number(subjectId)
+  console.log(subjectIdToNumber, 'subject id');
   try {
     const LAST_ATTEMPT_ID = await prisma.examAttempts.create(
       {
         data: {
           userId,
+          subjectId: subjectIdToNumber
         },
         select: { id: true }
       }
@@ -53,7 +56,7 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
     if (lastSubmittedOption.length === 0) return res.status(404).send({ error: "Something went wrong." })
     await prisma.examAttempts.update(
       {
-        where: { id: LAST_ATTEMPT_ID.id },
+        where: { id: LAST_ATTEMPT_ID.id, userId: userId },
         data: {
           correctAns: resultSummary.correctAns,
           wrongAns: resultSummary.wrongAns

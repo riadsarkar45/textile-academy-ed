@@ -3,6 +3,8 @@ import { getComPosts } from "../controllers/community/getComPosts";
 import { getMcqs } from "../controllers/mcq/getMcq";
 import { McqResult } from "../controllers/mcq/getMcqResult";
 import { allSubjects } from "../controllers/subjects/all-subjects";
+import { subjectWiseQuestion } from "../controllers/mcq/yearlySelectQustion";
+import { fetchAttempts } from "../controllers/mcq/attempt";
 
 export const getRoutes = async (fastify: FastifyInstance) => {
     fastify.get("/community/posts", {
@@ -15,7 +17,7 @@ export const getRoutes = async (fastify: FastifyInstance) => {
         // }
     }, getComPosts)
 
-    fastify.get("/mcq", {
+    fastify.get("/mcq/:subjectId/:yearId", {
         // config: {
         //     rateLimit: {
         //         max: 3,
@@ -34,4 +36,8 @@ export const getRoutes = async (fastify: FastifyInstance) => {
     }, McqResult)
 
     fastify.get("/subjects", allSubjects)
+
+    fastify.get("/topics/:subjectId", subjectWiseQuestion)
+
+    fastify.get("/attempts-history/:subjectId", fetchAttempts)
 }

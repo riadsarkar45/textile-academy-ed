@@ -1,87 +1,47 @@
 import { CiStopwatch } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import FixedBottomBar from "../../../components/FixedBottomBar";
-import { Link } from "react-router";
-import { useEffect } from "react";
+import { Link, useParams } from "react-router";
+import { useEffect, useState } from "react";
 import useAxiosPublic from "../../../hooks/Axios";
 const McqQuestions = () => {
+    const [questionBank, setQuestionBank] = useState([])
     const axiosPublic = useAxiosPublic();
+    const { subjectId } = useParams()
+    console.log(subjectId);
     useEffect(() => {
         const fetchSubjects = async () => {
             try {
-                const res = await axiosPublic.get("/subjects")
-                console.log(res.data.data);
+                const res = await axiosPublic.get(`/topics/${subjectId}`)
+                setQuestionBank(res.data.data);
             } catch (err) {
                 console.log(err);
             }
         }
         fetchSubjects();
-    }, [axiosPublic])
+    }, [axiosPublic, subjectId])
     return (
         <div className=" w-[50rem] m-auto">
             <h2 className="mb-8">Entrance Exam</h2>
             <div className="grid grid-cols-3 gap-3">
-                <Link to="/live-exam/mcq">
-                    <div className="border rounded-lg bg-white p-4">
-                        <h2 className="mb-3 font-semibold">Physics Written Exam 2016</h2>
-                        <div className="flex text-gray-600 gap-2 items-center">
-                            <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
-                            <span>|</span>
-                            <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
-                        </div>
-                    </div>
-                </Link>
-                <div className="border rounded-lg bg-white p-4">
-                    <h2 className="font-semibold">Chemistry Written Exam 2016</h2>
-                    <div className="flex text-gray-600 gap-2 items-center">
-                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
-                        <span>|</span>
-                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
-                    </div>
-                </div>
-                <div className="border rounded-lg bg-white p-4">
-                    <h2 className="font-semibold">Maths Written Exam 2016</h2>
-                    <div className="flex text-gray-600 gap-2 items-center">
-                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
-                        <span>|</span>
-                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
-                    </div>
-                </div>
-                <div className="border rounded-lg bg-white p-4">
-                    <h2 className="font-semibold">English Written Exam 2016</h2>
-                    <div className="flex text-gray-600 gap-2 items-center">
-                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
-                        <span>|</span>
-                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
-                    </div>
-                </div>
-                <div className="border rounded-lg bg-white p-4">
-                    <h2 className="font-semibold">Bangla Written Exam 2016</h2>
-                    <div className="flex text-gray-600 gap-2 items-center">
-                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
-                        <span>|</span>
-                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
-                    </div>
-                </div>
-                <div className="border rounded-lg bg-white p-4">
-                    <h2 className="font-semibold">Biology Written Exam 2016</h2>
-                    <div className="flex text-gray-600 gap-2 items-center">
-                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
-                        <span>|</span>
-                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
-                    </div>
-                </div>
-                <div className="border rounded-lg bg-white p-4">
-                    <h2 className="font-semibold">Quality Control Written Exam 2016</h2>
-                    <div className="flex text-gray-600 gap-2 items-center">
-                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
-                        <span>|</span>
-                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
-                    </div>
-                </div>
-            </div>
-            <FixedBottomBar />
+                {
+                    questionBank?.map((question, i) => {
+                        return (
+                            <Link key={i} to={`/live-exam/mcq/${question.subjectId}/${question.id}`}>
+                                <div className="border rounded-lg bg-white p-4">
+                                    <h2 className="mb-3 font-semibold">{question.examTitle} {question.year}</h2>
+                                    <div className="flex text-gray-600 gap-2 items-center">
+                                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
+                                        <span>|</span>
+                                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
+                                    </div>
+                                </div>
+                            </Link>
+                        )
+                    })
+                }
 
+            </div>
         </div>
     );
 };

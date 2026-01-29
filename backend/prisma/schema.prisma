@@ -41,6 +41,7 @@ model mcqQuestions {
 model questionYear {
   id           Int            @id @default(autoincrement())
   examTitle    String         @db.VarChar(100)
+  subjectId    Int
   year         String         @db.VarChar(4)
   mcqQuestions mcqQuestions[]
 }
@@ -61,6 +62,7 @@ model examAttempts {
   userId      Int
   correctAns  Int?
   wrongAns    Int?
+  subjectId   Int
   takenAt     DateTime        @default(now())
   submissions mcqSubmission[]
 }
