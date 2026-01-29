@@ -6,6 +6,7 @@ import useAxiosPublic from "../../../hooks/Axios";
 const Exam = () => {
     const [examQuestion, setExamQuestion] = useState([])
     const [selectedOption, setSelectedOption] = useState({});
+    const [fetchedResult, setFetchedResult] = useState({})
     const axiosPublic = useAxiosPublic();
     useEffect(() => {
         const fetchExamQuestions = async () => {
@@ -23,9 +24,13 @@ const Exam = () => {
         console.log(selectedOption, "submitting");
 
         const res = await axiosPublic.post("/mcq/attempts", selectedOption)
-        console.log(res.status);
         if (res.status === 201) {
-            const examResult = await axiosPublic("/mcq/results")
+            setSelectedOption({})
+            if (res.data.lastSubmittedOption.length !== 0) {
+                setFetchedResult(res.data.lastSubmittedOption)
+            } else {
+                setSelectedOption({})
+            }
         }
     }
     return (
@@ -82,7 +87,12 @@ const Exam = () => {
             </div>
 
             <div>
-                <McqExam selectedOption={selectedOption} setSelectedOption={setSelectedOption} examQuestion={examQuestion} />
+                <McqExam
+                    selectedOption={selectedOption}
+                    setSelectedOption={setSelectedOption}
+                    examQuestion={examQuestion}
+                    fetchedResult={fetchedResult}
+                />
             </div>
             <FixedBottomBar buttonAction={handleResultSubmit} buttonName="See Result" />
         </div>

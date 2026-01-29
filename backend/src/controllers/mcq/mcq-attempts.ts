@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../../database/prisma/prisma";
+import { mcqResults } from "../../utils/mcq-results";
 
 export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyReply) => {
   const userId = 1;
@@ -25,8 +26,7 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
       }
     )
     const correctMap = new Map(
-      correctOptions.map(o => [o.id, o.isCorrect])
-    );
+    correctOptions.map(o => [o.id, o.isCorrect]));
     const attemptId = Number(LAST_ATTEMPT_ID.id);
     const records = Object.entries(answers).map(([questionId, answer]) => ({
       userId,
@@ -37,9 +37,16 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
     }));
 
     await prisma.mcqSubmission.createMany({ data: records });
-    
 
-    return res.status(201).send({ message: "Saved", count: records.length });
+    const lastSubmittedOption = await prisma.mcqSubmission.findMany(
+      {
+        where: { attemptId: attemptId }
+      }
+    )
+
+    if (lastSubmittedOption.length === 0) return res.status(404).send({ error: "Something went wrong." })
+    const submittedOptions = mcqResults(lastSubmittedOption)
+    return res.status(201).send({ message: "Saved", lastSubmittedOption: submittedOptions });
   } catch (err) {
     console.error(err);
     return res.status(500).send({ error: "Save failed" });
