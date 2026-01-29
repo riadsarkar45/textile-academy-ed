@@ -7,6 +7,7 @@ const Exam = () => {
     const [examQuestion, setExamQuestion] = useState([])
     const [selectedOption, setSelectedOption] = useState({});
     const [fetchedResult, setFetchedResult] = useState({})
+    const [mcqResultSummary, setMcqResultSummary] = useState({})
     const axiosPublic = useAxiosPublic();
     useEffect(() => {
         const fetchExamQuestions = async () => {
@@ -28,6 +29,7 @@ const Exam = () => {
             setSelectedOption({})
             if (res.data.lastSubmittedOption.length !== 0) {
                 setFetchedResult(res.data.lastSubmittedOption)
+                setMcqResultSummary(res.data.resultSummary);
             } else {
                 setSelectedOption({})
             }
@@ -92,9 +94,16 @@ const Exam = () => {
                     setSelectedOption={setSelectedOption}
                     examQuestion={examQuestion}
                     fetchedResult={fetchedResult}
+                    mcqResultSummary = {mcqResultSummary}
                 />
             </div>
-            <FixedBottomBar buttonAction={handleResultSubmit} buttonName="See Result" />
+            {Object.keys(fetchedResult).length === 0 && (
+                <FixedBottomBar
+                    buttonAction={handleResultSubmit}
+                    buttonName="See Result"
+                />
+            )}
+
         </div>
     );
 };

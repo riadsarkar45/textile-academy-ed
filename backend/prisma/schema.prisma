@@ -59,8 +59,10 @@ model mcqOptions {
 model examAttempts {
   id          Int             @id @default(autoincrement())
   userId      Int
+  correctAns  Int?
+  wrongAns    Int?
   takenAt     DateTime        @default(now())
-  submissions mcqSubmission[] 
+  submissions mcqSubmission[]
 }
 
 model mcqSubmission {

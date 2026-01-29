@@ -25,8 +25,7 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
         select: { id: true, isCorrect: true }
       }
     )
-    const correctMap = new Map(
-    correctOptions.map(o => [o.id, o.isCorrect]));
+    const correctMap = new Map(correctOptions.map(o => [o.id, o.isCorrect]));
     const attemptId = Number(LAST_ATTEMPT_ID.id);
     const records = Object.entries(answers).map(([questionId, answer]) => ({
       userId,
@@ -44,9 +43,25 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
       }
     )
 
+    const correctCount = lastSubmittedOption.filter(a => a.isCorrect).length;
+    const wrongCount = lastSubmittedOption.filter(a => !a.isCorrect).length;
+    const resultSummary = {
+      correctAns: correctCount,
+      wrongAns: wrongCount
+    }
+
     if (lastSubmittedOption.length === 0) return res.status(404).send({ error: "Something went wrong." })
+    await prisma.examAttempts.update(
+      {
+        where: { id: LAST_ATTEMPT_ID.id },
+        data: {
+          correctAns: resultSummary.correctAns,
+          wrongAns: resultSummary.wrongAns
+        }
+      }
+    )
     const submittedOptions = mcqResults(lastSubmittedOption)
-    return res.status(201).send({ message: "Saved", lastSubmittedOption: submittedOptions });
+    return res.status(201).send({ message: "Saved", lastSubmittedOption: submittedOptions, resultSummary: resultSummary });
   } catch (err) {
     console.error(err);
     return res.status(500).send({ error: "Save failed" });

@@ -2,7 +2,7 @@ import { ImCross } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { Link } from "react-router";
-const McqExam = ({ examQuestion, setSelectedOption, selectedOption, fetchedResult }) => {
+const McqExam = ({ examQuestion, setSelectedOption, selectedOption, fetchedResult, mcqResultSummary }) => {
     // const [selectedOption, setSelectedOption] = useState({});
     const handleOptionSelect = async (questionId, optionId, isCorrect) => {
         setSelectedOption(prev => ({
@@ -29,6 +29,12 @@ const McqExam = ({ examQuestion, setSelectedOption, selectedOption, fetchedResul
             </div>
             <h2>Bangla mcq test</h2>
             {
+                Object.values(fetchedResult).length !== 0 && <div className="flex gap-2 mb-2">
+                    <span className="bg-green-500 bg-opacity-20 rounded-lg text-green-600 p-2">Correct Answer: {mcqResultSummary?.correctAns}</span>
+                    <span className="bg-red-500 bg-opacity-20 rounded-lg text-red-600 p-2">Wrong Answer: {mcqResultSummary?.wrongAns}</span>
+                </div>
+            }
+            {
                 examQuestion?.map((question, qIndex) => {
                     const selectedOpt = selectedOption[question.id] || {};
                     const results = fetchedResult[question.id] || {};
@@ -43,35 +49,37 @@ const McqExam = ({ examQuestion, setSelectedOption, selectedOption, fetchedResul
                         >
                             <h2 className="mb-4">{qIndex + 1}. {question.question}</h2>
                             <div className="grid grid-cols-2 gap-5 rounded-lg p-3">
-                                {question.options?.map((option, oIndex) => {
-                                    const fetched = fetchedResult[question.id]; // backend result for this question
-                                    const isUserSelected = option.id === fetched?.optionId;
-                                    const isCorrectOption = option.isCorrect; // from backend or mcqOptions
+                                {
+                                    question.options?.map((option, oIndex) => {
+                                        const fetched = fetchedResult[question.id]; // backend result for this question
+                                        const isUserSelected = option.id === fetched?.optionId;
+                                        const isCorrectOption = option.isCorrect; // from backend or mcqOptions
 
-                                    let bgColor = 'bg-gray-200';
+                                        let bgColor = 'bg-gray-200';
 
-                                    if (fetched) {
-                                        if (isUserSelected) {
-                                            bgColor = fetched.isCorrect ? 'bg-green-500' : 'bg-red-500';
-                                        } else if (!fetched.isCorrect && isCorrectOption) {
-                                            bgColor = 'bg-green-300'; // show correct answer if user got it wrong
+                                        if (fetched) {
+                                            if (isUserSelected) {
+                                                bgColor = fetched.isCorrect ? 'bg-green-500' : 'bg-red-500';
+                                            } else if (!fetched.isCorrect && isCorrectOption) {
+                                                bgColor = 'bg-green-300'; // show correct answer if user got it wrong
+                                            }
+                                        } else if (isUserSelected) {
+                                            // optional: show instant selection before submit
+                                            bgColor = 'bg-yellow-200';
                                         }
-                                    } else if (isUserSelected) {
-                                        // optional: show instant selection before submit
-                                        bgColor = 'bg-yellow-200';
-                                    }
 
-                                    return (
-                                        <button
-                                            key={oIndex}
-                                            disabled={!!fetched} // disable after result is fetched
-                                            onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)}
-                                            className={`${bgColor} p-3 flex items-start rounded-lg cursor-pointer`}
-                                        >
-                                            {oIndex + 1}. {option.options}
-                                        </button>
-                                    );
-                                })}
+                                        return (
+                                            <button
+                                                key={oIndex}
+                                                disabled={!!fetched} // disable after result is fetched
+                                                onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)}
+                                                className={`${bgColor} p-3 flex items-start rounded-lg cursor-pointer`}
+                                            >
+                                                {oIndex + 1}. {option.options}
+                                            </button>
+                                        );
+                                    })
+                                }
                             </div>
 
                         </div>
