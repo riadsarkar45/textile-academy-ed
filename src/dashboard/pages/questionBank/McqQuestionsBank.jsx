@@ -2,7 +2,21 @@ import { CiStopwatch } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import FixedBottomBar from "../../../components/FixedBottomBar";
 import { Link } from "react-router";
+import { useEffect } from "react";
+import useAxiosPublic from "../../../hooks/Axios";
 const McqQuestions = () => {
+    const axiosPublic = useAxiosPublic();
+    useEffect(() => {
+        const fetchSubjects = async () => {
+            try {
+                const res = await axiosPublic.get("/subjects")
+                console.log(res.data.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchSubjects();
+    }, [axiosPublic])
     return (
         <div className=" w-[50rem] m-auto">
             <h2 className="mb-8">Entrance Exam</h2>

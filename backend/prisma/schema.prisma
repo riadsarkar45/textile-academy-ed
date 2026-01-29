@@ -56,12 +56,21 @@ model mcqOptions {
   @@map("mcq_options")
 }
 
+model examAttempts {
+  id          Int             @id @default(autoincrement())
+  userId      Int
+  takenAt     DateTime        @default(now())
+  submissions mcqSubmission[] 
+}
+
 model mcqSubmission {
-  id         Int     @id @default(autoincrement())
-  questionId String
-  optionId   Int
-  isCorrect  Boolean
-  userId     Int
+  id          Int          @id @default(autoincrement())
+  questionId  String
+  optionId    Int
+  isCorrect   Boolean
+  userId      Int
+  attemptId   Int
+  examAttempt examAttempts @relation(fields: [attemptId], references: [id], onDelete: Cascade)
 }
 
 model subjects {

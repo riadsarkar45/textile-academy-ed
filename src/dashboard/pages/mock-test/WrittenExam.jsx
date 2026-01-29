@@ -10,7 +10,7 @@ const Exam = () => {
     useEffect(() => {
         const fetchExamQuestions = async () => {
             try {
-                const res = await axiosPublic.get("/mcq")
+                const res = await axiosPublic.get(`/mcq`)
                 setExamQuestion(res.data.mcqs);
             } catch (err) {
                 console.log(err);

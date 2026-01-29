@@ -89,7 +89,6 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          )
       );
 
-
       return res.status(201).send({
          message: "MCQs created successfully",
          data: results,
