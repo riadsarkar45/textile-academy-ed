@@ -37,15 +37,26 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          });
       }
       const subjectId = subjectRecord.id;
+      const convertYearToNumber = Number(year)
+      let yearRecord = await prisma.questionYear.findFirst(
+         {
+            where: { year: convertYearToNumber, subjectId: subjectId },
+            select: { id: true }
+         }
+      )
 
-      const yearRecord = await prisma.questionYear.create({
-         data: {
-            year: year,
-            subjectId: subjectRecord.id,
-            examTitle: examTitle
-         },
-         select: { id: true }
-      });
+      if (!yearRecord) {
+         yearRecord = await prisma.questionYear.create({
+            data: {
+               year: convertYearToNumber,
+               subjectId: subjectRecord.id,
+               examTitle: examTitle
+            },
+            select: { id: true }
+         });
+      }
+
+
       const yearId = yearRecord.id;
 
       const validationErrors = [];

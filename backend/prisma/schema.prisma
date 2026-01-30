@@ -42,7 +42,7 @@ model questionYear {
   id           Int            @id @default(autoincrement())
   examTitle    String         @db.VarChar(100)
   subjectId    Int
-  year         String         @db.VarChar(4)
+  year         Int         
   mcqQuestions mcqQuestions[]
 }
 
