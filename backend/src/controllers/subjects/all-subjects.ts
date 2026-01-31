@@ -3,11 +3,15 @@ import prisma from "../../database/prisma/prisma";
 
 export const allSubjects = async (req: FastifyRequest, res: FastifyReply) => {
     try {
+        const { examType } = req.params as { examType: string };
+        console.log(examType, "exam type");
         const subjects = await prisma.subjects.findMany(
             {
+                where: examType ? { examType } : {},
                 select: {
                     id: true,
-                    subjectName: true
+                    subjectName: true,
+                    topics: true
                 }
             }
         )

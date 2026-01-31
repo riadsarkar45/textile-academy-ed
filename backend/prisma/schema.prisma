@@ -27,15 +27,27 @@ model mcqQuestions {
   isActive       Boolean  @default(true)
   createdAt      DateTime @default(now())
   tempKey        String   @unique
-  subjectId      Int?
+  examType       String
+  examTopicId    Int
+  subjectId      Int
   questionYearId Int?
 
   options      mcqOptions[]
   subjects     subjects?     @relation(fields: [subjectId], references: [id])
   questionYear questionYear? @relation(fields: [questionYearId], references: [id], onDelete: Cascade)
+  topics       topics        @relation(fields: [examTopicId], references: [id], onDelete: Cascade)
 
   @@index([isActive])
   @@map("mcq_questions")
+}
+
+model topics {
+  id         Int    @id @default(autoincrement())
+  topicTitle String
+  subjectId  Int
+
+  questions mcqQuestions[]
+  subjects  subjects?      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
 }
 
 model questionYear {
@@ -80,7 +92,9 @@ model mcqSubmission {
 model subjects {
   id           Int            @id @default(autoincrement())
   subjectName  String         @unique @db.VarChar(100)
+  examType     String
   mcqQuestions mcqQuestions[]
+  topics       topics[]
 
   @@map("subjects")
 }

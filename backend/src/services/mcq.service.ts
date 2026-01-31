@@ -1,6 +1,6 @@
 import prisma from "../database/prisma/prisma"
 
-export const subjectRecords = async (subjectName: string) => {
+export const subjectRecords = async (subjectName: string, examType: string) => {
     if (!subjectName && typeof subjectName !== "string") throw new Error("Subject name is missing")
 
     let records = await prisma.subjects.findUnique(
@@ -14,6 +14,7 @@ export const subjectRecords = async (subjectName: string) => {
             {
                 data: {
                     subjectName: subjectName,
+                    examType: examType
                 },
                 select: { id: true }
             }
@@ -42,4 +43,27 @@ export const yearRecords = async (year: number, subjectId: number, examTitle: st
         )
     }
     return yearRecord.id
+}
+
+export const subjectTopicRecord = async (topic: string, subjectId: number) => {
+    if (!topic && !subjectId) throw new Error("Topic or Subject id is missing")
+    let topicRecord = await prisma.topics.findFirst(
+        {
+            where: { topicTitle: topic },
+            select: { id: true }
+        }
+    )
+    if (!topicRecord) {
+        topicRecord = await prisma.topics.create(
+            {
+                data: {
+                    topicTitle: topic,
+                    subjectId: subjectId
+                },
+                select: { id: true, topicTitle: true }
+            }
+        )
+    }
+
+    return Number(topicRecord.id)
 }

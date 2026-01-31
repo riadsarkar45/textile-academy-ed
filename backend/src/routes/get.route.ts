@@ -35,7 +35,7 @@ export const getRoutes = async (fastify: FastifyInstance) => {
         // }
     }, McqResult)
 
-    fastify.get("/subjects", allSubjects)
+    fastify.get("/subjects/:examType?", allSubjects)
 
     fastify.get("/topics/:subjectId", subjectWiseQuestion)
 

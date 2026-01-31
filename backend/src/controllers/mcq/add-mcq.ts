@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { validateMcq } from "../../utils/mcq.validations";
 import prisma from "../../database/prisma/prisma";
-import { subjectRecords, yearRecords } from "../../services/mcq.service";
+import { subjectRecords, subjectTopicRecord, yearRecords } from "../../services/mcq.service";
 import { randomUUID } from "crypto";
 export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
    try {
@@ -15,6 +15,8 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       const hasSubjectName = mcqs[0]?.subject || undefined;
       const year = mcqs[0]?.year || undefined;
       const examTitle = mcqs[0]?.examTitle || "No title found";
+      const examType = mcqs[0]?.examType || "No exam type found";
+      const examTopic = mcqs[0]?.examTopic || "No exam topic found";
       const hasDifferentSubjects = mcqs.some(mcq => mcq.subject !== hasSubjectName)
       if (hasDifferentSubjects) {
          return res.status(400).send({
@@ -26,7 +28,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       if (!hasSubjectName || typeof hasSubjectName !== 'string') {
          return res.status(400).send({ error: "Subject name is required in the first MCQ object" });
       }
-      const subRecord = await subjectRecords(hasSubjectName) // returns subject record id
+      const subRecord = await subjectRecords(hasSubjectName, examType) // returns subject record id
 
       if (!subRecord) {
          return res.status(400).send({ error: "Subject record not found" });
@@ -35,7 +37,8 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       const subjectId = subRecord;
       const convertYearToNumber = Number(year)
       const yearRecord = await yearRecords(convertYearToNumber, subjectId, examTitle)
-
+      const topicRecord = await subjectTopicRecord(examTopic, subjectId)
+      if(!topicRecord) return;
       const yearId = yearRecord;
 
       const validationErrors = [];
@@ -57,6 +60,8 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
             isActive: true,
             subjectId: subjectId,
             questionYearId: yearId,
+            examType: mcq.examType,
+            examTopicId: topicRecord,
             tempKey: randomUUID()
 
          }
@@ -79,7 +84,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          }
       });
       const optionsData: {
-         options: any; isCorrect: boolean; questionId: number; 
+         options: any; isCorrect: boolean; questionId: number;
       }[] = [];
 
       for (const mcq of insertedMcqs) {
@@ -89,7 +94,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
             optionsData.push({
                options: originalMcq[`option${label}`],
                isCorrect: originalMcq.correctAnswer.trim().toLowerCase() === originalMcq[`option${label}`].trim().toLowerCase(),
-               questionId: mcq.id 
+               questionId: mcq.id
             });
          });
       }

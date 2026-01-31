@@ -14,6 +14,8 @@ export const validateMcq = (mcq: any): string[] => {
   const optionB = mcq.optionB?.trim() || '';
   const optionC = mcq.optionC?.trim() || '';
   const optionD = mcq.optionD?.trim() || '';
+  const examType = mcq.examType?.trim() || '';
+  const examTopic = mcq.examTopic?.trim() || '';
 
   const options = [optionA, optionB, optionC, optionD];
 
@@ -21,7 +23,8 @@ export const validateMcq = (mcq: any): string[] => {
   if (!examTitle) errors.push("Exam title is missing.");
   if (!question) errors.push("Question is missing.");
   if (!correctAnswer) errors.push("Correct answer is missing.");
-
+  if (!examType) errors.push("Exam type is required");
+  if (!examTopic) errors.push("Exam topic is required");
   // Check for missing options
   if (options.some(opt => !opt)) errors.push("Option missing.");
 

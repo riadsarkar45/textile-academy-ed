@@ -10,12 +10,16 @@ const validateMcq = (mcq) => {
   const optionC = mcq.optionC?.trim();
   const optionD = mcq.optionD?.trim();
   const examTitle = mcq.examTitle?.trim();
+  const examType = mcq.examType?.trim();
+  const examTopic = mcq.examTopic?.trim();
 
   // Required fields
   if (!examTitle) errors.push("Exam title is missing");
   if (!question) errors.push("Question missing");
   if (!correctAnswer) errors.push("Correct answer missing");
   if (!subject) errors.push("Subject is required");
+  if (!examType) errors.push("Exam type is required");
+  if (!examTopic) errors.push("Exam topic is required");
 
   // Options array
   const options = [optionA, optionB, optionC, optionD];
