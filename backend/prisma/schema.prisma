@@ -22,11 +22,11 @@ model users {
 }
 
 model mcqQuestions {
-  id        Int      @id @default(autoincrement())
-  question  String   @db.Text
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-
+  id             Int      @id @default(autoincrement())
+  question       String   @db.Text
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  tempKey        String   @unique
   subjectId      Int?
   questionYearId Int?
 
@@ -42,7 +42,7 @@ model questionYear {
   id           Int            @id @default(autoincrement())
   examTitle    String         @db.VarChar(100)
   subjectId    Int
-  year         Int         
+  year         Int
   mcqQuestions mcqQuestions[]
 }
 

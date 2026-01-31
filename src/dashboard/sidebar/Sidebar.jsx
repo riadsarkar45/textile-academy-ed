@@ -34,7 +34,7 @@ export default function Sidebar() {
                 </div>
 
                 {/* Scrollable Menu */}
-                <nav className="flex-1 overflow-y-auto p-3 space-y-5">
+                <nav className="flex-1 overflow-y-auto p-3 space-y-1">
                     <Link
                         to="/"
                         className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"

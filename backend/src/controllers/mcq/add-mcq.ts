@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { validateMcq } from "../../utils/mcq.validations";
 import prisma from "../../database/prisma/prisma";
-
+import { subjectRecords, yearRecords } from "../../services/mcq.service";
+import { randomUUID } from "crypto";
 export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
    try {
       const body = req.body;
@@ -25,39 +26,17 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       if (!hasSubjectName || typeof hasSubjectName !== 'string') {
          return res.status(400).send({ error: "Subject name is required in the first MCQ object" });
       }
-      let subjectRecord = await prisma.subjects.findUnique({
-         where: { subjectName: hasSubjectName },
-         select: { id: true }
-      });
+      const subRecord = await subjectRecords(hasSubjectName) // returns subject record id
 
-      if (!subjectRecord) {
-         subjectRecord = await prisma.subjects.create({
-            data: { subjectName: hasSubjectName },
-            select: { id: true }
-         });
+      if (!subRecord) {
+         return res.status(400).send({ error: "Subject record not found" });
       }
-      const subjectId = subjectRecord.id;
+
+      const subjectId = subRecord;
       const convertYearToNumber = Number(year)
-      let yearRecord = await prisma.questionYear.findFirst(
-         {
-            where: { year: convertYearToNumber, subjectId: subjectId },
-            select: { id: true }
-         }
-      )
+      const yearRecord = await yearRecords(convertYearToNumber, subjectId, examTitle)
 
-      if (!yearRecord) {
-         yearRecord = await prisma.questionYear.create({
-            data: {
-               year: convertYearToNumber,
-               subjectId: subjectRecord.id,
-               examTitle: examTitle
-            },
-            select: { id: true }
-         });
-      }
-
-
-      const yearId = yearRecord.id;
+      const yearId = yearRecord;
 
       const validationErrors = [];
       for (let i = 0; i < mcqs.length; i++) {
@@ -72,34 +51,51 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
 
 
       const prismaPayload = mcqs.map((mcq) => {
-         const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const;
-         const options = OPTION_LABELS.map((label) => ({
-            options: mcq[`option${label}`].trim(),
-            isCorrect: mcq.correctAnswer.trim().toLowerCase() === mcq[`option${label}`].trim().toLowerCase(),
-         }));
 
          return {
             question: mcq.question,
             isActive: true,
             subjectId: subjectId,
             questionYearId: yearId,
-            options: {
-               create: options,
-            },
+            tempKey: randomUUID()
+
          }
       })
 
       if (prismaPayload.length === 0) return res.status(400).send({ error: "No MCQs to insert" });
-
+      prismaPayload.map((load) => console.log(load, "payload"))
       const results = await prisma.$transaction(
          prismaPayload.map((data) =>
-            prisma.mcqQuestions.create({
+            prisma.mcqQuestions.createMany({
                data,
-               include: { options: true }
-
             })
          )
       );
+      const tempKeys = prismaPayload.map(m => m.tempKey);
+
+      const insertedMcqs = await prisma.mcqQuestions.findMany({
+         where: {
+            tempKey: { in: tempKeys }
+         }
+      });
+      const optionsData: {
+         options: any; isCorrect: boolean; questionId: number; 
+      }[] = [];
+
+      for (const mcq of insertedMcqs) {
+         const originalMcq = mcqs.find(m => m.question === mcq.question)!;
+
+         ['A', 'B', 'C', 'D'].forEach(label => {
+            optionsData.push({
+               options: originalMcq[`option${label}`],
+               isCorrect: originalMcq.correctAnswer.trim().toLowerCase() === originalMcq[`option${label}`].trim().toLowerCase(),
+               questionId: mcq.id 
+            });
+         });
+      }
+
+      await prisma.mcqOptions.createMany({ data: optionsData });
+
 
       return res.status(201).send({
          message: "MCQs created successfully",

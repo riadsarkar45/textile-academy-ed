@@ -46,16 +46,17 @@ const StartExam = () => {
                                         <div key={i} className='flex bg-white border p-5 rounded-lg items-center mb-1'>
                                             <div className='grid '>
                                                 <span className=''> {i + 1}. Attempt</span>
+                                                <small>12 January, 2026</small>
+
                                                 <div className='flex gap-2 items-center'>
-                                                    <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-green-500">
+                                                    <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-opacity-30 text-green-700 border-green-400 border bg-green-500">
                                                         {attempt.correctAns}
                                                     </span>
-                                                    <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-red-500">
+                                                    <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-opacity-30 text-red-700 border-red-400 border bg-red-500">
                                                         {attempt.wrongAns}
                                                     </span>
 
                                                 </div>
-                                                <small>12 January, 2026</small>
                                             </div>
 
                                             {/* push to right */}
