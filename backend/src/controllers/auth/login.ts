@@ -15,7 +15,8 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
             {
                 userEmail: emailFound.email,
                 userName: emailFound.name,
-                userRole: emailFound.role
+                userRole: emailFound.role,
+                userId: emailFound.id
             }
         )
         res.setCookie('token', token, {
