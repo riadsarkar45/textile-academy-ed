@@ -4,10 +4,12 @@ import { mcqResults } from "../../utils/mcq-results";
 
 
 export const McqResult = async (req: FastifyRequest, res: FastifyReply) => {
+    const { userId } = req.user as { userId: number }
+
     const results = await prisma.mcqSubmission.findMany(
         {
             where: {
-                userId: 1
+                userId: userId
             }
         }
     )

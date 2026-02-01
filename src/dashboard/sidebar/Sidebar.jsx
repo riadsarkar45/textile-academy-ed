@@ -28,8 +28,7 @@ export default function Sidebar() {
             >
                 {/* Header (fixed) */}
                 <div className="h-16  p-3 flex items-center border-b border-gray-700 shrink-0">
-                    <img className="h-[2rem] w-[5rem] " src={Logo} alt="" />
-                    <h1 className="text-md font-bold font-serif">Textile Academy</h1>
+                    <img className="h-[3.6rem] w-[13rem] " src={Logo} alt="" />
 
                 </div>
 

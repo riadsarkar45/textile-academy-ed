@@ -3,7 +3,8 @@ import prisma from "../../database/prisma/prisma";
 import { mcqResults } from "../../utils/mcq-results";
 
 export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyReply) => {
-  const userId = 1;
+  const { userId } = req.user as { userId: number }
+  // const userId = 1;
   const answers = req.body as Record<string, { optionId: string; isCorrect: boolean }>;
   const { subjectId } = req.params as { subjectId: number }
   const subjectIdToNumber = Number(subjectId)

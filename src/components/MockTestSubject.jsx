@@ -5,11 +5,11 @@ const MockTestSubject = ({ subject, setSubjectTopics }) => {
         setSubjectTopics(topics)
     }
     return (
-        <div>
+        <div className="grid grid-cols-2 w-[50rem] gap-3 m-auto">
             {
                 subject?.map((subs, i) => {
                     return (
-                        <div key={i} className="border flex items-center gap-3 text-xl p-2 bg-white shadow rounded-lg hover:bg-gray-100 cursor-pointer">
+                        <div key={i} className="border  items-center gap-3 text-xl p-2 bg-white shadow rounded-lg hover:bg-gray-100 cursor-pointer">
                             <button onClick={() => handleSubjectSelect(subs.topics)}>{subs.subjectName}</button>
                         </div>
                     )

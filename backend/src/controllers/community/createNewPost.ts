@@ -3,6 +3,8 @@ import prisma from "../../database/prisma/prisma";
 
 export const createNewCommunityPost = async (req: FastifyRequest, res: FastifyReply) => {
     try {
+          const { userId } = req.user as { userId: number }
+
         const { title, content, authorId } = req.body as { title: string; content: string; authorId: number };
 
         if (!title || !content || !authorId) {
@@ -14,7 +16,7 @@ export const createNewCommunityPost = async (req: FastifyRequest, res: FastifyRe
                 data: {
                     title: title.trim(),
                     content: content.trim(),
-                    authorId: authorIdToNumber,
+                    authorId: userId,
                 }
             }
         )

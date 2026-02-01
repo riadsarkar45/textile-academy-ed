@@ -3,8 +3,9 @@ import prisma from "../../database/prisma/prisma";
 
 export const fetchAttempts = async (req: FastifyRequest, res: FastifyReply) => {
     const { subjectId } = req.params as { subjectId: Number }
+    const { userId } = req.user as { userId: number }
     const convertToNumber = Number(subjectId)
-    const userId = 1;
+    // const userId = 1;
     try {
         const attempts = await prisma.examAttempts.findMany(
             {
