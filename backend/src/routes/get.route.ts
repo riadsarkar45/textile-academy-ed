@@ -10,6 +10,7 @@ import { loggedInUser } from "../controllers/auth/logged-user";
 
 export const getRoutes = async (fastify: FastifyInstance) => {
     fastify.get("/community/posts", {
+        preHandler: authenticate
         // config: {
         //     rateLimit:
         //     {
@@ -34,6 +35,7 @@ export const getRoutes = async (fastify: FastifyInstance) => {
 
 
     fastify.get("/mcq/results", {
+        preHandler: authenticate
         // config: {
         //     rateLimit: {
         //         max: 3,
@@ -42,11 +44,11 @@ export const getRoutes = async (fastify: FastifyInstance) => {
         // }
     }, McqResult)
 
-    fastify.get("/subjects/:examType?", allSubjects)
+    fastify.get("/subjects/:examType?", { preHandler: authenticate }, allSubjects)
 
-    fastify.get("/topics/:subjectId", subjectWiseQuestion)
+    fastify.get("/topics/:subjectId", { preHandler: authenticate }, subjectWiseQuestion)
 
-    fastify.get("/attempts-history/:subjectId",{ preHandler: authenticate }, fetchAttempts)
+    fastify.get("/attempts-history/:subjectId", { preHandler: authenticate }, fetchAttempts)
 
     fastify.get("/logged-in-user", { preHandler: authenticate }, loggedInUser)
 }

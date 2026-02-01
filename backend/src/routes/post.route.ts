@@ -4,8 +4,10 @@ import { createNewCommunityPost } from "../controllers/community/createNewPost";
 import { mcqAttemptsController } from "../controllers/mcq/mcq-attempts";
 import { register } from "../controllers/auth/register";
 import { login } from "../controllers/auth/login";
+import { authenticate } from "../controllers/auth/auth-plugin";
 export const postRoutes = (fastify: FastifyInstance) => {
   fastify.post("/new-mcq", {
+    preHandler: authenticate,
     schema: {
       body: {
         type: "array",
@@ -27,6 +29,7 @@ export const postRoutes = (fastify: FastifyInstance) => {
   }, createNewMcq)
 
   fastify.post("/create/community/post", {
+    preHandler: authenticate,
     schema: {
       body: {
         type: "object",
@@ -42,6 +45,7 @@ export const postRoutes = (fastify: FastifyInstance) => {
   }, createNewCommunityPost)
 
   fastify.post("/mcq/attempts/:subjectId", {
+    preHandler: authenticate,
     schema: {
       body: {
         type: "object",
