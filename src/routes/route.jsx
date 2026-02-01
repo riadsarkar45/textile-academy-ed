@@ -8,6 +8,8 @@ import QuestionBank from "../dashboard/pages/questionBank/QuestionBank";
 import McqQuestions from "../dashboard/pages/questionBank/McqQuestionsBank";
 import StartExam from "../dashboard/pages/questionBank/StartExam";
 import Exam from "../dashboard/pages/mock-test/WrittenExam";
+import Login from "../auth/Login";
+import Registration from "../auth/Registration";
 
 const Routes = createBrowserRouter(
     [
@@ -49,6 +51,14 @@ const Routes = createBrowserRouter(
                     element: <Exam />
                 }
             ]
+        },
+        {
+            path: "/login",
+            element: <Login />
+        },
+        {
+            path: "/register",
+            element: <Registration />
         }
     ]
 )

@@ -1,4 +1,3 @@
-import React from 'react';
 import Sidebar from '../dashboard/sidebar/Sidebar';
 import { Outlet } from 'react-router';
 
@@ -9,7 +8,7 @@ const Root = () => {
             <Sidebar />
 
             {/* Main content takes remaining space and scrolls */}
-            <main className="ml-[16rem] w-full h-screen overflow-y-auto p-6 bg-gray-50 bg-opacity-1">
+            <main className="ml-[16rem] w-full h-screen overflow-y-auto p-6 bg-yellow-50">
                 <Outlet />
             </main>
         </div>
