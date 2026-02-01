@@ -5,6 +5,7 @@ import { McqResult } from "../controllers/mcq/getMcqResult";
 import { allSubjects } from "../controllers/subjects/all-subjects";
 import { subjectWiseQuestion } from "../controllers/mcq/yearlySelectQustion";
 import { fetchAttempts } from "../controllers/mcq/attempt";
+import { authenticate } from "../controllers/auth/auth-plugin";
 
 export const getRoutes = async (fastify: FastifyInstance) => {
     fastify.get("/community/posts", {
@@ -17,14 +18,19 @@ export const getRoutes = async (fastify: FastifyInstance) => {
         // }
     }, getComPosts)
 
-    fastify.get("/mcq/:subjectId/:yearId", {
-        // config: {
-        //     rateLimit: {
-        //         max: 3,
-        //         timeWindow: "5 seconds"
-        //     }
-        // }
-    }, getMcqs)
+    fastify.get("/mcq/:subjectId/:yearId",
+        {
+            preHandler: authenticate,
+            // config: {
+            //   rateLimit: {
+            //     max: 3,
+            //     timeWindow: "5 seconds"
+            //   }
+            // }
+        },
+        getMcqs
+    );
+
 
     fastify.get("/mcq/results", {
         // config: {

@@ -2,6 +2,8 @@ import { FastifyInstance } from "fastify";
 import { createNewMcq } from "../controllers/mcq/add-mcq";
 import { createNewCommunityPost } from "../controllers/community/createNewPost";
 import { mcqAttemptsController } from "../controllers/mcq/mcq-attempts";
+import { register } from "../controllers/users/register";
+import { login } from "../controllers/users/login";
 export const postRoutes = (fastify: FastifyInstance) => {
   fastify.post("/new-mcq", {
     schema: {
@@ -68,4 +70,30 @@ export const postRoutes = (fastify: FastifyInstance) => {
       }
     }
   }, mcqAttemptsController);
+
+  fastify.post("/register", {
+    schema: {
+      body: {
+        type: "object",
+        required: ["userEmail", "userPassword",],
+        properties: {
+          userEmail: { type: "string", format: "email" },
+          userPassword: { type: "string" }
+        }
+      }
+    }
+  }, register)
+
+  fastify.post("/login", {
+    schema: {
+      body: {
+        type: "object",
+        required: ["email", "password"],
+        properties: {
+          email: { type: "string" },
+          password: { type: "string" },
+        }
+      }
+    }
+  }, login)
 }
