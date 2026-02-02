@@ -31,9 +31,9 @@ const McqQuestions = () => {
                                 <div className="border rounded-lg bg-white p-4">
                                     <h2 className="mb-3 font-semibold">{question.examTitle} {question.year}</h2>
                                     <div className="flex text-gray-600 gap-2 items-center">
-                                        <p className="flex gap-1 items-center"><CiStopwatch /> 4 hr</p>
+                                        <p className="flex gap-1 items-center"><CiStopwatch /> {question._count.mcqQuestions * 1 || 0} mins</p>
                                         <span>|</span>
-                                        <p className="flex gap-1 items-center">< FaRegEdit />15 Qs</p>
+                                        <p className="flex gap-1 items-center">< FaRegEdit />{question._count.mcqQuestions || 0} Questions</p>
                                     </div>
                                 </div>
                             </Link>

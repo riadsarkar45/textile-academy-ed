@@ -9,8 +9,10 @@ import { MdOutlineLeaderboard } from "react-icons/md";
 import { GiProgression } from "react-icons/gi";
 import { Link } from "react-router";
 import Logo from "../../assets/cropped-online-textile-academy-logo-favicon.webp"
+import LoggedInUser from "../../hooks/LoggedInUser";
 export default function Sidebar() {
     const [open, setOpen] = useState(false);
+    const { user } = LoggedInUser();
 
     return (
         <div>
@@ -94,13 +96,11 @@ export default function Sidebar() {
 
                 {/* User Profile (fixed bottom) */}
                 <div className="h-16 border-t border-gray-700 flex items-center px-4 shrink-0">
-                    <img
-                        src="https://i.pravatar.cc/40"
-                        alt="user"
-                        className="w-10 h-10 rounded-full"
-                    />
+                    <h2 className="w-10 font-serif bg-gray-200 border h-10 rounded-full flex items-center justify-center">
+                        {user?.userName[0]}
+                    </h2>
                     <div className="ml-3">
-                        <p className="text-sm font-medium">Riad Sarkar</p>
+                        <p className="text-sm font-medium">{user?.userName}</p>
                         <p className="text-xs text-gray-400">Admin</p>
                     </div>
                 </div>

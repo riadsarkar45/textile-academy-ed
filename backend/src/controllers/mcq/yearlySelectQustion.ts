@@ -12,7 +12,12 @@ export const subjectWiseQuestion = async (req: FastifyRequest, res: FastifyReply
                     examTitle: true,
                     subjectId: true,
                     year: true,
-                    id: true
+                    id: true,
+                    _count:{
+                        select:{
+                            mcqQuestions: true,
+                        }
+                    }
                 }
             }
         )
