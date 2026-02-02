@@ -10,20 +10,18 @@ export const userLeaderboard = async (req: FastifyRequest, res: FastifyReply) =>
             return res.status(400).send({ error: "Invalid subject ID" });
         }
 
-        // Step 1: Get best correctAns per user for this subject
+        // Step 1: Get max correctAns per user
         const bestAttempts = await prisma.examAttempts.groupBy({
             by: ['userId'],
             where: { subjectId: subId },
-            _max: {
-                correctAns: true
-            }
+            _max: { correctAns: true }
         });
 
         if (bestAttempts.length === 0) {
             return res.status(404).send({ message: "No leaderboard found yet.." });
         }
 
-        // Step 2: Fetch the attempt rows corresponding to max correctAns
+        // Step 2: Fetch leaderboard rows
         const leaderboard = await prisma.examAttempts.findMany({
             where: {
                 OR: bestAttempts.map(b => ({
@@ -40,11 +38,10 @@ export const userLeaderboard = async (req: FastifyRequest, res: FastifyReply) =>
             take: 20,
             include: {
                 user: {
-                    select: { id: true, name: true }
+                    select: { id: true, name: true }  // TS-safe
                 }
             }
         });
-
 
 
         res.status(200).send({ leaderboard });
