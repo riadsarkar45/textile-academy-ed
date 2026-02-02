@@ -42,7 +42,7 @@ export const userLeaderboard = async (req: FastifyRequest, res: FastifyReply) =>
                 correctAns: true,
                 wrongAns: true,
                 takenAt: true,
-                users: {          // relation field name should match your schema
+                user: {          // relation field name should match your schema
                     select: { id: true, name: true }
                 }
             }

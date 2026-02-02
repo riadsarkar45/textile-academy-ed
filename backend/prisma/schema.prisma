@@ -79,7 +79,7 @@ model examAttempts {
   wrongAns    Int?
   subjectId   Int
   takenAt     DateTime        @default(now())
-  users       users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       users           @relation(fields: [userId], references: [id], onDelete: Cascade)
   submissions mcqSubmission[]
 }
 
