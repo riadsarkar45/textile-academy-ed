@@ -20,6 +20,8 @@ model users {
   email    String @unique
   role     String
   password String
+
+  examAttempts examAttempts[]
 }
 
 model mcqQuestions {
@@ -77,6 +79,7 @@ model examAttempts {
   wrongAns    Int?
   subjectId   Int
   takenAt     DateTime        @default(now())
+  users       users           @relation(fields: [userId], references: [id], onDelete: Cascade)
   submissions mcqSubmission[]
 }
 

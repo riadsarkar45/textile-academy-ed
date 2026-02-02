@@ -7,6 +7,7 @@ import { subjectWiseQuestion } from "../controllers/mcq/yearlySelectQustion";
 import { fetchAttempts } from "../controllers/mcq/attempt";
 import { authenticate } from "../controllers/auth/auth-plugin";
 import { loggedInUser } from "../controllers/auth/logged-user";
+import { userLeaderboard } from "../controllers/subjects/leaderboard";
 
 export const getRoutes = async (fastify: FastifyInstance) => {
     fastify.get("/community/posts", {
@@ -51,4 +52,6 @@ export const getRoutes = async (fastify: FastifyInstance) => {
     fastify.get("/attempts-history/:subjectId", { preHandler: authenticate }, fetchAttempts)
 
     fastify.get("/logged-in-user", { preHandler: authenticate }, loggedInUser)
+
+    fastify.get("/leaderboard/:subjectId", { preHandler: authenticate }, userLeaderboard)
 }

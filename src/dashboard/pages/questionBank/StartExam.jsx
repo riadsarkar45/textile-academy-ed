@@ -1,12 +1,13 @@
 import { CiStopwatch } from 'react-icons/ci';
 import { FaRegEdit } from 'react-icons/fa';
-import profileImage from '../../../assets/Generated Image August 31, 2025 - 7_52PM.jpeg';
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import { Link, useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import useAxiosPublic from '../../../hooks/Axios';
+import LeaderBoard from '../../learderboard/LeaderBoard';
 const StartExam = () => {
     const [attempts, setAttempts] = useState([])
+    const [leaderBoard, setLeaderBoard] = useState([])
     const { subjectId, yearId } = useParams()
     const axiosPublic = useAxiosPublic();
     console.log(subjectId);
@@ -14,6 +15,9 @@ const StartExam = () => {
         const fetchAttempts = async () => {
             try {
                 const res = await axiosPublic.get(`/attempts-history/${subjectId}`)
+                const leaderboard = await axiosPublic.get(`/leaderboard/${subjectId}`)
+                setLeaderBoard(leaderboard?.data?.leaderboard);
+                console.log(leaderboard?.data?.leaderboard);
                 setAttempts(res.data.data);
             } catch (err) {
                 console.log(err);
@@ -26,15 +30,15 @@ const StartExam = () => {
             <h2 className='mb-8'>Live Exam</h2>
             <div className='grid grid-cols-2 gap-6'>
                 <div className=''>
-                    <div className=' mb-5'>
+                    {/* <div className=' mb-5'>
                         <div className='flex bg-white gap-6 border p-5 rounded-lg items-center w-full '>
                             <span className='flex gap-1 items-center'><span className='text-red-600 font-extrabold'><CiStopwatch /></span> 1 hrs 30 mins</span>
                             <span> |</span>
                             <span className='flex gap-1 items-center'> <span className='text-green-600 font-extrabold'>< FaRegEdit /></span> 15 Questions</span>
                         </div>
-                    </div>
+                    </div> */}
                     <div className='w-full grid bg-white'>
-                        <Link className='rounded-lg border mb-2 p-4 shadow-md bg-green-900 text-white font-semibold' to={`/exam/mcq/${subjectId}/${yearId}`}><span >Start Exam</span></Link>
+                        <Link className='rounded-lg border mb-2 flex justify-center p-4 shadow-md bg-green-900 text-white font-semibold' to={`/exam/mcq/${subjectId}/${yearId}`}><span >Start Exam</span></Link>
                         <button className='rounded-lg border p-4 border-green-900 text-green-900 shadow-md '>See Question Paper</button>
                     </div>
                     <div>
@@ -75,7 +79,8 @@ const StartExam = () => {
                         <button className='bg-green-900 p-2 rounded-lg text-white'><FaRegArrowAltCircleRight /></button>
                     </div>
                     <div>
-                        <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
+                        <LeaderBoard leaderBoard={leaderBoard} />
+                        {/* <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
                             <img
                                 className='w-[3rem] h-[3rem] rounded-[3rem]'
                                 src={profileImage}
@@ -83,42 +88,9 @@ const StartExam = () => {
                             />
                             <span className='ml-2'>Riad Sarkar</span>
 
-                            {/* push to right */}
                             <span className='ml-auto'>#1</span>
-                        </div>
-                        <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
-                            <img
-                                className='w-[3rem] h-[3rem] rounded-[3rem]'
-                                src={profileImage}
-                                alt="profileImage"
-                            />
-                            <span className='ml-2'>Riad Sarkar</span>
+                        </div> */}
 
-                            {/* push to right */}
-                            <span className='ml-auto'>#1</span>
-                        </div>
-                        <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
-                            <img
-                                className='w-[3rem] h-[3rem] rounded-[3rem]'
-                                src={profileImage}
-                                alt="profileImage"
-                            />
-                            <span className='ml-2'>Riad Sarkar</span>
-
-                            {/* push to right */}
-                            <span className='ml-auto'>#1</span>
-                        </div>
-                        <div className='flex bg-white border p-5 rounded-lg items-center mb-1'>
-                            <img
-                                className='w-[3rem] h-[3rem] rounded-[3rem]'
-                                src={profileImage}
-                                alt="profileImage"
-                            />
-                            <span className='ml-2'>Riad Sarkar</span>
-
-                            {/* push to right */}
-                            <span className='ml-auto'>#1</span>
-                        </div>
                     </div>
                 </div>
 
