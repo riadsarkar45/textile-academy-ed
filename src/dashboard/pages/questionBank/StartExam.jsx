@@ -16,7 +16,7 @@ const StartExam = () => {
             try {
                 const res = await axiosPublic.get(`/attempts-history/${subjectId}`)
                 const leaderboard = await axiosPublic.get(`/leaderboard/${subjectId}`)
-                setLeaderBoard(leaderboard?.data?.leaderboard);
+                // setLeaderBoard(leaderboard?.data?.leaderboard);
                 console.log(leaderboard?.data?.leaderboard);
                 setAttempts(res.data.data);
             } catch (err) {
@@ -54,10 +54,10 @@ const StartExam = () => {
 
                                                 <div className='flex gap-2 items-center'>
                                                     <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-opacity-30 text-green-700 border-green-400 border bg-green-500">
-                                                        {attempt.correctAns}
+                                                        {attempt?.correctAns}
                                                     </span>
                                                     <span className="inline-flex items-center justify-center h-[1.6rem] w-[1.6rem] rounded-[1.6rem] bg-opacity-30 text-red-700 border-red-400 border bg-red-500">
-                                                        {attempt.wrongAns}
+                                                        {attempt?.wrongAns}
                                                     </span>
 
                                                 </div>

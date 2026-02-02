@@ -10,6 +10,7 @@ import StartExam from "../dashboard/pages/questionBank/StartExam";
 import Exam from "../dashboard/pages/mock-test/WrittenExam";
 import Login from "../auth/Login";
 import Registration from "../auth/Registration";
+import Dashboard from "../dashboard/home/Dashboard";
 
 const Routes = createBrowserRouter(
     [
@@ -18,6 +19,10 @@ const Routes = createBrowserRouter(
             path: '/',
             element: <Root />,
             children: [
+                {
+                    path: "/",
+                    element: <Dashboard />
+                },
                 {
                     path: '/community',
                     element: <CreateNewPost />

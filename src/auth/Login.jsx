@@ -2,16 +2,21 @@ import { useState } from "react";
 import Logo from "../assets/cropped-online-textile-academy-logo-favicon.webp"
 import useAxiosPublic from "../hooks/Axios";
 import LoggedInUser from "../hooks/LoggedInUser";
+import { useNavigate } from "react-router";
 const Login = () => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const axiosPublic = useAxiosPublic();
     const { user } = LoggedInUser();
+    const navigate = useNavigate()
     console.log(user);
     const handleLogin = async () => {
         console.log(email, password);
         const res = await axiosPublic.post("/login", { email, password })
         console.log(res.data);
+        if(res.data.message === "Login Successful"){
+            navigate("/")
+        }
     }
     return (
         <div className="bg-gray-50">
