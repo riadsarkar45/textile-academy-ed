@@ -36,17 +36,16 @@ export const userLeaderboard = async (req: FastifyRequest, res: FastifyReply) =>
                 { wrongAns: 'asc' },
                 { takenAt: 'asc' }
             ],
-            distinct: ['userId'],  // <--- ensures one row per user
+            distinct: ['userId'],
             take: 20,
-            select: {
-                correctAns: true,
-                wrongAns: true,
-                takenAt: true,
-                user: {          // relation field name should match your schema
+            include: {
+                user: {
                     select: { id: true, name: true }
                 }
             }
         });
+
+
 
         res.status(200).send({ leaderboard });
 
