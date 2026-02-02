@@ -21,7 +21,7 @@ model users {
   role     String
   password String
 
-  examAttempts examAttempts[]
+  examAttempt examAttempts[]
 }
 
 model mcqQuestions {
