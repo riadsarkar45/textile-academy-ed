@@ -39,7 +39,7 @@ app.register(fastifyJwt, {
   }
 })
 
-const allowedOrigins = ["https://textileacademy.vercel.app", "http://localhost:5173"]
+const allowedOrigins = ["https://textileacademy.vercel.app", "http://localhost:5173", "https://fiberacademy.vercel.app"]
 
 app.register(cors, {
   origin: allowedOrigins,
