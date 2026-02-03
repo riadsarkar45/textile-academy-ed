@@ -29,6 +29,7 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
             select: {
                 wrongAns: true,
                 correctAns: true,
+                
                 user: {
                     select: {
                         name: true,
@@ -40,8 +41,41 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
         }
     )
 
+    const subjectStats = await prisma.examAttempts.groupBy({
+        by: ['subjectId'],
+        where: { userId: userIdToNumber },
+        _sum: {
+            correctAns: true,
+            wrongAns: true
+        },
+        _count: {
+            id: true 
+        }
+    });
 
-    if (!totalExamsAttempt) {
+    const subjects = await prisma.subjects.findMany({
+        where: { id: { in: subjectStats.map(s => s.subjectId) } },
+        select:{
+            mcqQuestions:true,
+            subjectName: true,
+            id: true,
+        }
+    });
+
+    const subjectWiseStats = subjectStats.map(s => {
+        const subject = subjects.find(sub => sub.id === s.subjectId)!;
+        return {
+            subjectId: s.subjectId,
+            subjectName: subject.subjectName,
+            totalCorrect: s._sum.correctAns || 0,
+            totalWrong: s._sum.wrongAns || 0,
+            attempts: s._count.id,
+            totalQuestions: subject.mcqQuestions?.length || 0
+
+        };
+    });
+
+    if (!totalExamsAttempt && !leaderboard) {
         return res.send(
             {
                 accuracy: 0,
@@ -67,5 +101,6 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
         totalExamsAns: totalExamsAns,
         totalExamsAttempt: totalExamsAttempt,
         leaderboard: leaderboard || [],
+        subjectWiseStats: subjectWiseStats
     });
 }
