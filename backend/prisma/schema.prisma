@@ -79,8 +79,9 @@ model examAttempts {
   wrongAns    Int?
   subjectId   Int
   takenAt     DateTime        @default(now())
-  user       users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        users           @relation(fields: [userId], references: [id], onDelete: Cascade)
   submissions mcqSubmission[]
+  subjects    subjects?       @relation(fields: [subjectId], references: [id])
 }
 
 model mcqSubmission {
@@ -99,6 +100,7 @@ model subjects {
   examType     String
   mcqQuestions mcqQuestions[]
   topics       topics[]
+  examAttempt  examAttempts[]
 
   @@map("subjects")
 }

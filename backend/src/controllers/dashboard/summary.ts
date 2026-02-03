@@ -22,6 +22,24 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
         }
     )
 
+    const leaderboard = await prisma.examAttempts.findMany(
+        {
+            where: { userId: userIdToNumber },
+            orderBy: { correctAns: "asc" },
+            select: {
+                wrongAns: true,
+                correctAns: true,
+                user: {
+                    select: {
+                        name: true,
+                    }
+                }
+
+            },
+
+        }
+    )
+
 
     if (!totalExamsAttempt) {
         return res.send(
@@ -29,6 +47,7 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
                 accuracy: 0,
                 totalExamsAns: 0,
                 totalExamsAttempt: 0,
+                leaderboard: []
             }
         )
     }
@@ -47,5 +66,6 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
         accuracy: accuracy,
         totalExamsAns: totalExamsAns,
         totalExamsAttempt: totalExamsAttempt,
+        leaderboard: leaderboard || [],
     });
 }

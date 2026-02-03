@@ -54,7 +54,7 @@ export const getRoutes = async (fastify: FastifyInstance) => {
 
     fastify.get("/logged-in-user", { preHandler: authenticate }, loggedInUser)
 
-    fastify.get("/leaderboard/:subjectId", { preHandler: authenticate }, userLeaderboard)
+    fastify.get("/leaderboard/:subjectId?", { preHandler: authenticate }, userLeaderboard)
 
     fastify.get("/summary", { preHandler: authenticate }, dashboardSummary)
 }

@@ -5,15 +5,16 @@ export const userLeaderboard = async (req: FastifyRequest, res: FastifyReply) =>
     try {
         const { subjectId } = req.params as { subjectId: string };
         const subId = Number(subjectId);
+        const { userId } = req.user as { userId: number };
+        // if (isNaN(subId)) {
+        //     return res.status(400).send({ error: "Invalid subject ID" });
+        // }
 
-        if (isNaN(subId)) {
-            return res.status(400).send({ error: "Invalid subject ID" });
-        }
+        const userIdToNumber = Number(userId)
 
-        // Step 1: Get max correctAns per user
         const bestAttempts = await prisma.examAttempts.groupBy({
             by: ['userId'],
-            where: { subjectId: subId },
+            where: subId ? { subjectId: subId } : { },
             _max: { correctAns: true }
         });
 
@@ -21,7 +22,6 @@ export const userLeaderboard = async (req: FastifyRequest, res: FastifyReply) =>
             return res.status(404).send({ message: "No leaderboard found yet.." });
         }
 
-        // Step 2: Fetch leaderboard rows
         const leaderboard = await prisma.examAttempts.findMany({
             where: {
                 OR: bestAttempts.map(b => ({
