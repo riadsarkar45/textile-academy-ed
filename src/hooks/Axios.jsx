@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const axiosPublic = axios.create({
     // baseURL: "https://textile-academy-ed-3.onrender.com",
-      baseURL: "http://127.0.0.1:5000",
+    baseURL: "http://127.0.0.1:5000",
     withCredentials: true,
 });
 axiosPublic.interceptors.response.use(

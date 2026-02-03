@@ -16,7 +16,7 @@ const StartExam = () => {
             try {
                 const res = await axiosPublic.get(`/attempts-history/${subjectId}`)
                 const leaderboard = await axiosPublic.get(`/leaderboard/${subjectId}`)
-                // setLeaderBoard(leaderboard?.data?.leaderboard);
+                setLeaderBoard(leaderboard?.data?.leaderboard);
                 console.log(leaderboard?.data?.leaderboard);
                 setAttempts(res.data.data);
             } catch (err) {
