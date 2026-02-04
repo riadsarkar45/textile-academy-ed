@@ -45,10 +45,11 @@ model mcqQuestions {
 }
 
 model liveExamRoom {
-  id               Int    @id @default(autoincrement())
+  id               Int     @id @default(autoincrement())
   roomName         String
   subjectName      String
   totalParticipant Int
+  isLocked         Boolean @default(true)
   roomPassword     String
   userId           Int
 }

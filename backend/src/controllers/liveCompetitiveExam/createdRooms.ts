@@ -9,6 +9,7 @@ export const createdRooms = async (req: FastifyRequest, res: FastifyReply) => {
                     roomName: true,
                     subjectName: true,
                     totalParticipant: true,
+                    isLocked:true
                 }
             }
         )

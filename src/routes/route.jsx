@@ -11,7 +11,7 @@ import Exam from "../dashboard/pages/mock-test/WrittenExam";
 import Login from "../auth/Login";
 import Registration from "../auth/Registration";
 import Dashboard from "../dashboard/home/Dashboard";
-import CompetitiveExam from "../dashboard/competitiveExam/CompetitiveExam";
+import CompetitiveExam from "../dashboard/competitiveExam/CreateComExam";
 import CreatedRooms from "../dashboard/competitiveExam/CreatedRooms";
 
 const Routes = createBrowserRouter(
