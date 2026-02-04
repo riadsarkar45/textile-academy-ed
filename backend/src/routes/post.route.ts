@@ -6,6 +6,7 @@ import { register } from "../controllers/auth/register";
 import { login } from "../controllers/auth/login";
 import { authenticate } from "../controllers/auth/auth-plugin";
 import { liveExam } from "../controllers/liveCompetitiveExam/liveExam";
+import { joinRoom } from "../controllers/liveCompetitiveExam/joinRoom";
 export const postRoutes = (fastify: FastifyInstance) => {
   fastify.post("/new-mcq", {
     preHandler: authenticate,
@@ -117,4 +118,19 @@ export const postRoutes = (fastify: FastifyInstance) => {
       }
     }
   }, liveExam)
+
+  fastify.post("/join-room", {
+    preHandler: authenticate,
+    schema: {
+      body: {
+        type: "object",
+        required: ["roomPassword", "roomId"],
+        properties: {
+          roomPassword: { type: "string" },
+          roomId: { type: "string" }
+        },
+        additionalProperties: false,
+      }
+    }
+  }, joinRoom)
 }
