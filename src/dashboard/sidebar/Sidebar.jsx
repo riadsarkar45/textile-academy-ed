@@ -91,6 +91,12 @@ export default function Sidebar() {
                     >
                         <GiProgression /> Create MCQ
                     </Link>
+                    <Link
+                        to="/competitive-exam"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                        <GiProgression />Live Competitive Exam
+                    </Link>
 
                 </nav>
 

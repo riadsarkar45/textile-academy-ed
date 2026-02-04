@@ -5,6 +5,7 @@ import { mcqAttemptsController } from "../controllers/mcq/mcq-attempts";
 import { register } from "../controllers/auth/register";
 import { login } from "../controllers/auth/login";
 import { authenticate } from "../controllers/auth/auth-plugin";
+import { liveExam } from "../controllers/liveCompetitiveExam/liveExam";
 export const postRoutes = (fastify: FastifyInstance) => {
   fastify.post("/new-mcq", {
     preHandler: authenticate,
@@ -100,4 +101,20 @@ export const postRoutes = (fastify: FastifyInstance) => {
       }
     }
   }, login)
+
+  fastify.post("/create-room", {
+    preHandler: authenticate,
+    schema: {
+      body: {
+        type: "object",
+        required: ["roomName", "subjectName", "roomPassword", "totalParticipant"],
+        properties: {
+          roomName: { type: "string" },
+          subjectName: { type: "string" },
+          roomPassword: { type: "string" },
+          totalParticipant: { type: "string" },
+        }
+      }
+    }
+  }, liveExam)
 }

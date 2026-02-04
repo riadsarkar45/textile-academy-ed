@@ -44,6 +44,15 @@ model mcqQuestions {
   @@map("mcq_questions")
 }
 
+model liveExamRoom {
+  id               Int    @id @default(autoincrement())
+  roomName         String
+  subjectName      String
+  totalParticipant Int
+  roomPassword     String
+  userId           Int
+}
+
 model topics {
   id         Int    @id @default(autoincrement())
   topicTitle String

@@ -11,6 +11,7 @@ import Exam from "../dashboard/pages/mock-test/WrittenExam";
 import Login from "../auth/Login";
 import Registration from "../auth/Registration";
 import Dashboard from "../dashboard/home/Dashboard";
+import CompetitiveExam from "../dashboard/competitiveExam/CompetitiveExam";
 
 const Routes = createBrowserRouter(
     [
@@ -54,7 +55,11 @@ const Routes = createBrowserRouter(
                 {
                     path: '/exam/mcq/:subjectId/:yearId',
                     element: <Exam />
-                }
+                },
+                {
+                    path: '/competitive-exam',
+                    element: <CompetitiveExam />
+                },
             ]
         },
         {
