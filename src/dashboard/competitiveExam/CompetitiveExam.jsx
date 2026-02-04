@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAxiosPublic from "../../hooks/Axios";
+import { Link } from "react-router";
 
 const CompetitiveExam = () => {
     const [roomName, setRoomName] = useState("")
@@ -22,7 +23,9 @@ const CompetitiveExam = () => {
         <div className='w-[50rem] m-auto'>
             <div className="flex justify-between mb-4">
                 <h2 className=''>Competitive Exam</h2>
-                <small className='bg-green-500 bg-opacity-30 rounded-md text-green-700 border-green-500 border p-1'>See Created Rooms</small>
+                <Link to="/created-rooms">
+                    <small className='bg-green-500 bg-opacity-30 rounded-md text-green-700 border-green-500 border p-1'>See Created Rooms</small>
+                </Link>
             </div>
             <div className='mb-3 grid grid-cols-2 w-full gap-5 items-center'>
                 <div>

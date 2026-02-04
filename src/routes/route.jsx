@@ -12,6 +12,7 @@ import Login from "../auth/Login";
 import Registration from "../auth/Registration";
 import Dashboard from "../dashboard/home/Dashboard";
 import CompetitiveExam from "../dashboard/competitiveExam/CompetitiveExam";
+import CreatedRooms from "../dashboard/competitiveExam/CreatedRooms";
 
 const Routes = createBrowserRouter(
     [
@@ -59,6 +60,10 @@ const Routes = createBrowserRouter(
                 {
                     path: '/competitive-exam',
                     element: <CompetitiveExam />
+                },
+                {
+                    path: '/created-rooms',
+                    element: <CreatedRooms />
                 },
             ]
         },
