@@ -32,10 +32,9 @@ const CreatedRooms = () => {
             roomId: roomId,
             roomPassword: roomPassword
         }
-        console.log(roomDetail);
         const joinRoom = await axiosPublic.post("/join-room", roomDetail)
         console.log(joinRoom.status);
-        if(joinRoom.status === 201){
+        if (joinRoom.status === 201) {
             navigate(`/exam-room/${joinRoom.data.roomId}`)
         }
     }
