@@ -46,7 +46,7 @@ export const postRoutes = (fastify: FastifyInstance) => {
     }
   }, createNewCommunityPost)
 
-  fastify.post("/mcq/attempts/:subjectId", {
+  fastify.post("/mcq/attempts", {
     preHandler: authenticate,
     schema: {
       body: {

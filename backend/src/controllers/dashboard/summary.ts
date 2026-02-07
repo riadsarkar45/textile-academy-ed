@@ -54,7 +54,7 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
     });
 
     const subjects = await prisma.subjects.findMany({
-        where: { id: { in: subjectStats.map(s => s.subjectId) } },
+        where: { id: { in: subjectStats.map(s => s.subjectId).filter((id): id is number => id !== null) } },
         select:{
             mcqQuestions:true,
             subjectName: true,

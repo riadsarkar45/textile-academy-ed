@@ -3,12 +3,37 @@ import prisma from "../../database/prisma/prisma";
 
 export const getMcqs = async (req: FastifyRequest, res: FastifyReply) => {
     try {
-        const { subjectId, yearId } = req.params as { subjectId: number, yearId: number }
-        const convertSubjectIdToNumber = Number(subjectId)
-        const convertYearIdToNumber = Number(yearId)
+        const { subjectId, yearId, roomId } = req.query as { subjectId?: number, yearId?: number, roomId?: number }
+        const whereClause: any = { isActive: true };
+
+        if (
+            (subjectId && !yearId) ||
+            (!subjectId && yearId)
+        ) {
+            return res.status(400).send({
+                message: "subjectId and yearId must be provided together"
+            });
+        }
+
+        if (!roomId && !subjectId && !yearId) {
+            return res.status(400).send({
+                message: "Provide roomId OR subjectId+yearId"
+            });
+        }
+
+        if (subjectId && yearId) {
+            whereClause.subjectId = Number(subjectId);
+            whereClause.questionYearId = Number(yearId);
+        }
+
+        if (roomId) {
+            whereClause.roomId = Number(roomId);
+        }
+
+
         const getMcqs = await prisma.mcqQuestions.findMany(
             {
-                where: { subjectId: convertSubjectIdToNumber, questionYearId: convertYearIdToNumber, isActive: true },
+                where: whereClause,
 
                 select: {
                     question: true,

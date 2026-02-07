@@ -6,19 +6,24 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
   const { userId } = req.user as { userId: number }
   // const userId = 1;
   const answers = req.body as Record<string, { optionId: string; isCorrect: boolean }>;
-  const { subjectId } = req.params as { subjectId: number }
-  const subjectIdToNumber = Number(subjectId)
-  console.log(subjectIdToNumber, 'subject id');
+  const { subjectId, roomId } = req.params as { subjectId?: number, roomId?: number }
+  const whereClause: any = {};
+  if (!subjectId) {
+    whereClause.roomId = Number(roomId)
+  }
+
+  if (!roomId) {
+    whereClause.subjectId = Number(subjectId)
+  }
   try {
-    const LAST_ATTEMPT_ID = await prisma.examAttempts.create(
-      {
-        data: {
-          userId,
-          subjectId: subjectIdToNumber
-        },
-        select: { id: true }
-      }
-    )
+    const LAST_ATTEMPT_ID = await prisma.examAttempts.create({
+      data: {
+        userId,
+        ...(subjectId && { subjectId: Number(subjectId) }),
+        ...(roomId && { roomId: Number(roomId) }),
+      },
+      select: { id: true }
+    });
     if (!LAST_ATTEMPT_ID) {
       return res.status(500).send({ error: "Could not create attempt record" });
     }
@@ -34,6 +39,7 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
     const records = Object.entries(answers).map(([questionId, answer]) => ({
       userId,
       questionId,
+      roomId: roomId,
       optionId: parseInt(answer.optionId, 10),
       isCorrect: correctMap.get(Number(answer.optionId)) || false,
       attemptId

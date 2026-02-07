@@ -24,7 +24,7 @@ export const getRoutes = async (fastify: FastifyInstance) => {
         // }
     }, getComPosts)
 
-    fastify.get("/mcq/:subjectId/:yearId/:roomId?",
+    fastify.get("/mcq",
         {
             preHandler: authenticate,
             // config: {
