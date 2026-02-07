@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
    try {
       const body = req.body;
-
+      const { roomId } = req.params as { roomId: number } || {};
       if (!Array.isArray(body)) {
          return res.status(400).send({ error: "Expected an array of MCQs" });
       }
@@ -38,8 +38,8 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       const convertYearToNumber = Number(year)
       const yearRecord = await yearRecords(convertYearToNumber, subjectId, examTitle)
       const topicRecord = await subjectTopicRecord(examTopic, subjectId)
-      
-      if(!topicRecord) return;
+
+      if (!topicRecord) return;
       const yearId = yearRecord;
 
       const validationErrors = [];
@@ -53,7 +53,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
          return res.status(400).send({ errors: validationErrors });
       }
 
-
+      const roomIdToNumber = Number(roomId)
       const prismaPayload = mcqs.map((mcq) => {
 
          return {
@@ -61,6 +61,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
             isActive: true,
             subjectId: subjectId,
             questionYearId: yearId,
+            roomId: roomIdToNumber,
             examType: mcq.examType,
             examTopicId: topicRecord,
             tempKey: randomUUID()

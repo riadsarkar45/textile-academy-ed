@@ -34,6 +34,7 @@ model mcqQuestions {
   examTopicId    Int
   subjectId      Int
   questionYearId Int?
+  roomId         Int?
 
   options      mcqOptions[]
   subjects     subjects?     @relation(fields: [subjectId], references: [id])
