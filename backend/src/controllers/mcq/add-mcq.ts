@@ -38,6 +38,7 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       const convertYearToNumber = Number(year)
       const yearRecord = await yearRecords(convertYearToNumber, subjectId, examTitle)
       const topicRecord = await subjectTopicRecord(examTopic, subjectId)
+      
       if(!topicRecord) return;
       const yearId = yearRecord;
 
@@ -68,7 +69,6 @@ export const createNewMcq = async (req: FastifyRequest, res: FastifyReply) => {
       })
 
       if (prismaPayload.length === 0) return res.status(400).send({ error: "No MCQs to insert" });
-      prismaPayload.map((load) => console.log(load, "payload"))
       const results = await prisma.$transaction(
          prismaPayload.map((data) =>
             prisma.mcqQuestions.createMany({

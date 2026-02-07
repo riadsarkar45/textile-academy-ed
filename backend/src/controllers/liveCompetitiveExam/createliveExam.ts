@@ -15,7 +15,7 @@ export const liveExam = async (req: FastifyRequest, res: FastifyReply) => {
 
     const totalParticipantToNumber = Number(totalParticipant)
 
-    const createRoom = await prisma.liveExamRoom.createMany(
+    const createRoom = await prisma.liveExamRoom.create(
         {
             data: {
                 roomName: roomName,
@@ -23,14 +23,17 @@ export const liveExam = async (req: FastifyRequest, res: FastifyReply) => {
                 totalParticipant: totalParticipantToNumber,
                 roomPassword: hashPassword,
                 userId: userId
+            },
+            select: {
+                id: true,
             }
         }
     )
 
-    if (!createRoom) {
+    if (!createRoom || !createRoom.id) {
         return res.status(400).send({ message: "Failed to create room." })
     }
 
-    res.status(201).send({ message: "Room created successful." })
+    res.status(201).send({ message: "Room created successful.", roomId: createRoom.id })
 
 }

@@ -9,7 +9,7 @@ import { authenticate } from "../controllers/auth/auth-plugin";
 import { loggedInUser } from "../controllers/auth/logged-user";
 import { userLeaderboard } from "../controllers/subjects/leaderboard";
 import { dashboardSummary } from "../controllers/dashboard/summary";
-import { liveExam } from "../controllers/liveCompetitiveExam/liveExam";
+import { liveExam } from "../controllers/liveCompetitiveExam/createliveExam";
 import { createdRooms } from "../controllers/liveCompetitiveExam/createdRooms";
 
 export const getRoutes = async (fastify: FastifyInstance) => {

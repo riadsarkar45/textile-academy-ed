@@ -5,10 +5,10 @@ import { mcqAttemptsController } from "../controllers/mcq/mcq-attempts";
 import { register } from "../controllers/auth/register";
 import { login } from "../controllers/auth/login";
 import { authenticate } from "../controllers/auth/auth-plugin";
-import { liveExam } from "../controllers/liveCompetitiveExam/liveExam";
+import { liveExam } from "../controllers/liveCompetitiveExam/createliveExam";
 import { joinRoom } from "../controllers/liveCompetitiveExam/joinRoom";
 export const postRoutes = (fastify: FastifyInstance) => {
-  fastify.post("/new-mcq", {
+  fastify.post("/new-mcq/:roomId?", {
     preHandler: authenticate,
     schema: {
       body: {
