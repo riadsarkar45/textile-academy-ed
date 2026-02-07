@@ -14,7 +14,9 @@ const Exam = () => {
     useEffect(() => {
         const fetchExamQuestions = async () => {
             try {
-                const res = await axiosPublic.get(`/mcq/${subjectId}/${yearId}`)
+                const res = await axiosPublic.get(`/mcq`, {
+                    params: { subjectId, yearId }
+                })
                 setExamQuestion(res.data.mcqs);
             } catch (err) {
                 console.log(err);
@@ -26,7 +28,11 @@ const Exam = () => {
     const handleResultSubmit = async () => {
         console.log(selectedOption, "submitting");
 
-        const res = await axiosPublic.post(`/mcq/attempts/${subjectId}`, selectedOption)
+        const res = await axiosPublic.post(`/mcq/attempts`, selectedOption, {
+            params: {
+                subjectId: subjectId
+            }
+        })
         if (res.status === 201) {
             setSelectedOption({})
             if (res.data.lastSubmittedOption.length !== 0) {
@@ -37,6 +43,7 @@ const Exam = () => {
             }
         }
     }
+    console.log(selectedOption, "selected options");
     return (
         <div className="w-[50rem] m-auto">
 
