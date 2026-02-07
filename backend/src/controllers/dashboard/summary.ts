@@ -29,7 +29,7 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
             select: {
                 wrongAns: true,
                 correctAns: true,
-                
+
                 user: {
                     select: {
                         name: true,
@@ -44,36 +44,49 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
     const subjectStats = await prisma.examAttempts.groupBy({
         by: ['subjectId'],
         where: { userId: userIdToNumber },
+
         _sum: {
             correctAns: true,
             wrongAns: true
         },
         _count: {
-            id: true 
+            id: true
         }
     });
 
     const subjects = await prisma.subjects.findMany({
         where: { id: { in: subjectStats.map(s => s.subjectId).filter((id): id is number => id !== null) } },
-        select:{
-            mcqQuestions:true,
+        select: {
+            mcqQuestions: true,
             subjectName: true,
             id: true,
         }
     });
 
     const subjectWiseStats = subjectStats.map(s => {
-        const subject = subjects.find(sub => sub.id === s.subjectId)!;
+        if (!s.subjectId) {
+            return {
+                subjectId: null,
+                subjectName: "Room Exam",
+                totalCorrect: s._sum.correctAns || 0,
+                totalWrong: s._sum.wrongAns || 0,
+                attempts: s._count.id,
+                totalQuestions: 0
+            };
+        }
+
+        const subject = subjects.find(sub => sub.id === s.subjectId);
+
         return {
             subjectId: s.subjectId,
-            subjectName: subject.subjectName,
+            subjectName: subject?.subjectName ?? "Unknown Subject",
             totalCorrect: s._sum.correctAns || 0,
             totalWrong: s._sum.wrongAns || 0,
             attempts: s._count.id,
-            totalQuestions: subject.mcqQuestions?.length || 0
-
+            totalQuestions: subject?.mcqQuestions?.length || 0
         };
     });
+
 
     if (!totalExamsAttempt && !leaderboard) {
         return res.send(
