@@ -103,6 +103,7 @@ model mcqSubmission {
   isCorrect   Boolean
   userId      Int
   attemptId   Int
+  roomId      Int?
   examAttempt examAttempts @relation(fields: [attemptId], references: [id], onDelete: Cascade)
 }
 

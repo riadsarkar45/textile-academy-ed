@@ -73,7 +73,7 @@ const McqExam = ({ examQuestion, setSelectedOption, selectedOption, fetchedResul
                                                 key={oIndex}
                                                 disabled={!!fetched} // disable after result is fetched
                                                 onClick={() => handleOptionSelect(question.id, option.id, option.isCorrect)}
-                                                className={`${bgColor} p-3 flex items-start rounded-lg cursor-pointer`}
+                                                className={`${bgColor} ${isUserSelected} p-3 flex items-start rounded-lg cursor-pointer`}
                                             >
                                                 {oIndex + 1}. {option.options}
                                             </button>

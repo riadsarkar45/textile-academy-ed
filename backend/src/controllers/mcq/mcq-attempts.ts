@@ -6,7 +6,7 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
   const { userId } = req.user as { userId: number }
   // const userId = 1;
   const answers = req.body as Record<string, { optionId: string; isCorrect: boolean }>;
-  const { subjectId, roomId } = req.params as { subjectId?: number, roomId?: number }
+  const { subjectId, roomId } = req.query as { subjectId?: number, roomId?: number }
   const whereClause: any = {};
   if (!subjectId) {
     whereClause.roomId = Number(roomId)
@@ -34,12 +34,13 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
         select: { id: true, isCorrect: true }
       }
     )
+    const roomIdToNumber = Number(roomId)
     const correctMap = new Map(correctOptions.map(o => [o.id, o.isCorrect]));
     const attemptId = Number(LAST_ATTEMPT_ID.id);
     const records = Object.entries(answers).map(([questionId, answer]) => ({
       userId,
       questionId,
-      roomId: roomId,
+      roomId: roomIdToNumber,
       optionId: parseInt(answer.optionId, 10),
       isCorrect: correctMap.get(Number(answer.optionId)) || false,
       attemptId
