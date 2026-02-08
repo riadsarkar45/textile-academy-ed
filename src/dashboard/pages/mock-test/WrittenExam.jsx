@@ -30,7 +30,8 @@ const Exam = () => {
 
         const res = await axiosPublic.post(`/mcq/attempts`, selectedOption, {
             params: {
-                subjectId: subjectId
+                subjectId: subjectId,
+                yearId: yearId
             }
         })
         if (res.status === 201) {

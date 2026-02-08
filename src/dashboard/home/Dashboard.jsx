@@ -87,7 +87,7 @@ const Dashboard = () => {
                                             <div className="flex gap-2 text-sm">
                                                 <small className="text-green-700 border-green-400 border bg-green-500 inline-flex items-center bg-opacity-30 justify-center p-[1px] w-[4.4rem] text-md rounded-md">Attempts: {SUB_STATS?.attempts} </small>
                                                 <span className="inline-flex items-center justify-center h-[1.6rem] w-[6.4rem] rounded-[1.6rem] text-md bg-opacity-30 text-yellow-700 border-yellow-400 border bg-yellow-500">
-                                                    Questions:  {SUB_STATS?.totalQuestions}
+                                                    Skipped:  {SUB_STATS?.totalSkipped}
                                                 </span>
                                                 <span className="inline-flex items-center justify-center h-[1.6rem] w-[5.1rem] rounded-[1.6rem] text-md bg-opacity-30 text-green-700 border-green-400 border bg-green-500">
                                                     Correct: {SUB_STATS?.totalCorrect}

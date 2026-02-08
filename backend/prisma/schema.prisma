@@ -84,16 +84,18 @@ model mcqOptions {
 }
 
 model examAttempts {
-  id          Int             @id @default(autoincrement())
-  userId      Int
-  correctAns  Int?
-  wrongAns    Int?
-  subjectId   Int?
-  takenAt     DateTime        @default(now())
-  roomId      Int?
-  user        users           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  submissions mcqSubmission[]
-  subjects    subjects?       @relation(fields: [subjectId], references: [id])
+  id            Int             @id @default(autoincrement())
+  userId        Int
+  correctAns    Int?
+  wrongAns      Int?
+  totalQuestion Int?
+  totalSkipped  Int?
+  subjectId     Int?
+  takenAt       DateTime        @default(now())
+  roomId        Int?
+  user          users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submissions   mcqSubmission[]
+  subjects      subjects?       @relation(fields: [subjectId], references: [id])
 }
 
 model mcqSubmission {

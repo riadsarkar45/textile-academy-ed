@@ -60,6 +60,12 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
             mcqQuestions: true,
             subjectName: true,
             id: true,
+            examAttempt: {
+                select: {
+                    totalSkipped: true,
+                    totalQuestion: true
+                }
+            }
         }
     });
 
@@ -76,14 +82,14 @@ export const dashboardSummary = async (req: FastifyRequest, res: FastifyReply) =
         }
 
         const subject = subjects.find(sub => sub.id === s.subjectId);
-
         return {
             subjectId: s.subjectId,
             subjectName: subject?.subjectName ?? "Unknown Subject",
             totalCorrect: s._sum.correctAns || 0,
             totalWrong: s._sum.wrongAns || 0,
             attempts: s._count.id,
-            totalQuestions: subject?.mcqQuestions?.length || 0
+            // totalSkipped: subject?.examAttempt.map((sk) => sk.totalSkipped),
+            totalSkipped: subject?.examAttempt.reduce((acc, sk) => acc + (sk.totalSkipped || 0), 0) || 0
         };
     });
 

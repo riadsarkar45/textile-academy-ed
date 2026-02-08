@@ -38,7 +38,9 @@ export const getMcqs = async (req: FastifyRequest, res: FastifyReply) => {
                 select: {
                     question: true,
                     options: true,
-                    id: true
+                    id: true,
+                    topics: true,
+                    subjects: true,
                 }
             }
         )

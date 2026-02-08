@@ -6,7 +6,7 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
   const { userId } = req.user as { userId: number }
   // const userId = 1;
   const answers = req.body as Record<string, { optionId: string; isCorrect: boolean }>;
-  const { subjectId, roomId } = req.query as { subjectId?: number, roomId?: number }
+  const { subjectId, roomId, yearId } = req.query as { subjectId?: number, roomId?: number, yearId: number }
   const whereClause: any = {};
   if (!subjectId) {
     whereClause.roomId = Number(roomId)
@@ -16,6 +16,17 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
     whereClause.subjectId = Number(subjectId)
   }
   try {
+    const yearIdToNumber = Number(yearId)
+    const countUserSubmission = Object.values(answers).length;
+
+    const countQuestion = await prisma.mcqQuestions.count(
+      {
+        where: { questionYearId: yearIdToNumber, isActive: true }
+      }
+    )
+    console.log(countQuestion, "question count", countUserSubmission, "count user submission");
+    const countTotalSkippedQuestion = countQuestion - countUserSubmission;
+    console.log(countTotalSkippedQuestion, "skipped questions");
     const LAST_ATTEMPT_ID = await prisma.examAttempts.create({
       data: {
         userId,
@@ -67,7 +78,9 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
         where: { id: LAST_ATTEMPT_ID.id, userId: userId },
         data: {
           correctAns: resultSummary.correctAns,
-          wrongAns: resultSummary.wrongAns
+          wrongAns: resultSummary.wrongAns,
+          totalSkipped: countTotalSkippedQuestion,
+          totalQuestion: countQuestion
         }
       }
     )
