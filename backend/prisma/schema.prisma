@@ -122,8 +122,8 @@ model subjects {
 
 model communityPosts {
   id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(200)
   content   String   @db.Text
+  imageUrl  String
   authorId  Int
   createdAt DateTime @default(now())
 

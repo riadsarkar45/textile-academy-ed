@@ -36,11 +36,10 @@ export const postRoutes = (fastify: FastifyInstance) => {
     schema: {
       body: {
         type: "object",
-        required: ["title", "content", "authorId"],
+        required: ["image", "content"],
         properties: {
-          title: { type: "string" },
+          image: { type: "string" },
           content: { type: "string" },
-          authorId: { type: "string" }
         },
         additionalProperties: false,
       }

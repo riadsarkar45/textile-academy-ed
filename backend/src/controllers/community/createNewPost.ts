@@ -5,18 +5,18 @@ export const createNewCommunityPost = async (req: FastifyRequest, res: FastifyRe
     try {
           const { userId } = req.user as { userId: number }
 
-        const { title, content, authorId } = req.body as { title: string; content: string; authorId: number };
-
-        if (!title || !content || !authorId) {
+        const { image, content } = req.body as { image: string; content: string; };
+        console.log(req.body, "body");
+        if (!image || !content || !userId) {
             return res.status(400).send({ error: "Missing required fields: title, content, authorId" });
         }
-        const authorIdToNumber = Number(authorId)
+        const authorIdToNumber = Number(userId)
         const createNewPost = await prisma.communityPosts.create(
             {
                 data: {
-                    title: title.trim(),
+                    imageUrl: image.trim(),
                     content: content.trim(),
-                    authorId: userId,
+                    authorId: authorIdToNumber,
                 }
             }
         )

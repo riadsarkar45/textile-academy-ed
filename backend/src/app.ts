@@ -49,13 +49,15 @@ app.register(cors, {
   allowedHeaders: ["Content-Type", "Authorization"]
 });
 
+// image upload route
+
+app.register(fastifyMultipart);
+
 /* routes after */
 app.register(routes);
 app.register(postRoutes);
 app.register(getRoutes);
 
-// image upload route
 
-app.register(fastifyMultipart);
 
 databaseConnect(app);
