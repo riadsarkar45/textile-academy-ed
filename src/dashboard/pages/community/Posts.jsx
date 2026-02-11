@@ -1,5 +1,4 @@
 import { HiDotsVertical } from 'react-icons/hi';
-import profileImage from '../../../assets/Generated Image August 31, 2025 - 7_52PM.jpeg';
 
 const Posts = ({ communityPosts }) => {
     console.log(communityPosts);
