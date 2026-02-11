@@ -22,7 +22,7 @@ const Posts = ({ communityPosts }) => {
                             <h2 className='mb-4'>{post.content}</h2>
                             <div className="w-full h-[20rem]">
                                 <img
-                                    src={profileImage}
+                                    src={post.imageUrl}
                                     alt="profile"
                                     className="w-full h-full object-contain"
                                 />
@@ -40,64 +40,7 @@ const Posts = ({ communityPosts }) => {
                                     <span>|</span>
                                     <button className="block mx-auto">Comment</button>
                                 </div>
-                                {/* <div>
-                                    <div className='flex gap-3 mt-6'>
-                                        <div>
-                                            <img className='w-[3rem] h-[3rem] rounded-[3rem]' src={profileImage} alt="userProfile" />
-                                        </div>
-                                        <div>
-                                            <div className='bg-gray-200 p-2 rounded-md'>
-                                                <h2>Riad Sarkar</h2>
-                                                <h2>This is my first and last comment</h2>
-                                            </div>
-                                            <div className='flex gap-5 mt-2 text-sm text-gray-500'>
-                                                <span>Like</span>
-                                                <span>Report</span>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                    <div className='flex gap-3 mt-6'>
-                                        <div>
-                                            <img className='w-[3rem] h-[3rem] rounded-[3rem]' src={profileImage} alt="userProfile" />
-                                        </div>
-                                        <div>
-                                            <div className='bg-gray-200 p-2 rounded-md'>
-                                                <h2>Riad Sarkar</h2>
-                                                <h2>This is my first and last comment amar shonar bangla ami tomay ghrina kori</h2>
-                                            </div>
-                                            <div className='flex gap-5 mt-2 text-sm text-gray-500'>
-                                                <span>Like</span>
-                                                <span>Report</span>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                    <div className='flex gap-3 mt-6'>
-                                        <div>
-                                            <img className='w-[3rem] h-[3rem] rounded-[3rem]' src={profileImage} alt="userProfile" />
-                                        </div>
-                                        <div>
-                                            <div className='bg-gray-200 p-2 rounded-md'>
-                                                <h2>Riad Sarkar</h2>
-                                                <h2>This is my first and last comment</h2>
-                                            </div>
-                                            <div className='flex gap-5 mt-2 text-sm text-gray-500'>
-                                                <span>Like</span>
-                                                <span>Report</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <button className='p-2 mb-4'>See more comments...</button>
-
-                                    <div className='flex gap-3 items-center mt-5'>
-                                        <img className='w-[3rem] h-[3rem] rounded-[3rem]' src={profileImage} alt="userProfile" />
-                                        <textarea name="" id="" placeholder='Write your answer' className='p-2 w-full outline-none h-14 rounded-lg border'></textarea>
-                                    </div>
-                                </div> */}
+                                
                             </div>
                         </div>
                     )

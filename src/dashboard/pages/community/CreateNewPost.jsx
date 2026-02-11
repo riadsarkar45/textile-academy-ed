@@ -1,6 +1,6 @@
 import { BiBell } from 'react-icons/bi';
+import { FaFileImage } from "react-icons/fa6";
 import profileImage from '../../../assets/Generated Image August 31, 2025 - 7_52PM.jpeg';
-import { HiDotsVertical } from "react-icons/hi";
 import { useEffect, useState } from 'react';
 import { HiMiniPaperAirplane } from "react-icons/hi2";
 import useAxiosPublic from '../../../hooks/Axios';
@@ -8,22 +8,8 @@ import Posts from './Posts';
 const CreateNewPost = () => {
     const [postDescription, setPostDescription] = useState();
     const [posts, setPosts] = useState([]);
+    const [images, setImages] = useState([])
     const axiosPublic = useAxiosPublic();
-    console.log(postDescription);
-    const handleCreateCommunityPost = async () => {
-        const postData = {
-            title: "No need title ((Static title for now))",
-            authorId: 2,
-            content: postDescription,
-        }
-
-        try {
-            const res = await axiosPublic.post("/create/community/post", postData)
-            console.log(res.data);
-        } catch (err) {
-            console.log(err);
-        }
-    }
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -37,6 +23,51 @@ const CreateNewPost = () => {
 
         fetchPosts();
     }, [axiosPublic]);
+
+    const handleCreateCommunityPost = async () => {
+
+        try {
+            const urlArray = [];
+            for (let i = 0; i < images.length; i++) {
+                const formData = new FormData();
+                formData.append("images", images[i].file);
+                const res = await axiosPublic.post("/upload", formData);
+                urlArray.push(res.data.files[0].secure_url);
+            }
+            (urlArray[0]);
+            if (urlArray.length === 0) {
+                console.log("image not uploaded");
+            }
+            const postData = {
+                image: urlArray[0],
+                content: postDescription,
+            }
+            console.log(postData);
+            const res = await axiosPublic.post("/create/community/post", postData)
+            console.log(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleFile = (e) => {
+        const files = e.target.files;
+
+        if (!files) return;
+
+        const fileArray = Array.from(files);
+
+        const previews = fileArray.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+        }));
+
+        setImages((prev) => [...prev, ...previews]);
+    };
+
+    console.log(images);
+
+
     return (
         <div className='w-[50rem] m-auto'>
             <div className='bg-white p-5 border rounded-md  shadow'>
@@ -56,14 +87,27 @@ const CreateNewPost = () => {
                             placeholder="What do you want to know today?"
                         ></textarea>
 
-                        <button
-                            onClick={() => handleCreateCommunityPost()}
-                            type="submit"
-                            className={`${!postDescription && 'hidden'} absolute bottom-2 right-2 px-3 py-1 text-green-600 text-sm rounded-md hover:bg-blue-700`}
-                        >
-                            <HiMiniPaperAirplane />
-                        </button>
+                        <div className="absolute bottom-2 right-2 flex gap-3">
+                            <button
+                                onClick={() => handleCreateCommunityPost()}
+                                type="button"
+                                className={`${!postDescription && 'hidden'} text-green-600 text-sm rounded-md hover:bg-blue-700 p-1`}
+                            >
+                                <HiMiniPaperAirplane />
+                            </button>
+
+                            <label className={`${!postDescription && 'hidden'} text-green-600 text-sm rounded-md hover:bg-blue-700 p-1 cursor-pointer`}>
+                                <FaFileImage />
+                                <input
+                                    type="file"
+                                    className="hidden"
+                                    onChange={(e) => handleFile(e)}
+                                />
+                            </label>
+
+                        </div>
                     </div>
+
                 </div>
             </div>
 
