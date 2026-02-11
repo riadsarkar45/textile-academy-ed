@@ -7,6 +7,7 @@ import { routes } from "./routes/home.route";
 import { getRoutes } from "./routes/get.route";
 import { databaseConnect } from "./database/connect";
 import fastifyCookie from '@fastify/cookie';
+import fastifyMultipart from "@fastify/multipart";
 export const app = Fastify({
   trustProxy: true,
   logger: {
@@ -52,5 +53,9 @@ app.register(cors, {
 app.register(routes);
 app.register(postRoutes);
 app.register(getRoutes);
+
+// image upload route
+
+app.register(fastifyMultipart);
 
 databaseConnect(app);

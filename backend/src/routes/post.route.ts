@@ -7,6 +7,7 @@ import { login } from "../controllers/auth/login";
 import { authenticate } from "../controllers/auth/auth-plugin";
 import { liveExam } from "../controllers/liveCompetitiveExam/createliveExam";
 import { joinRoom } from "../controllers/liveCompetitiveExam/joinRoom";
+import { multiFileUpload } from "../controllers/upload/upload";
 export const postRoutes = (fastify: FastifyInstance) => {
   fastify.post("/new-mcq/:roomId?", {
     preHandler: authenticate,
@@ -133,4 +134,8 @@ export const postRoutes = (fastify: FastifyInstance) => {
       }
     }
   }, joinRoom)
+
+  fastify.post("/upload", {
+    preHandler: authenticate,
+  }, multiFileUpload)
 }
