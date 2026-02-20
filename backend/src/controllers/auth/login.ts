@@ -5,7 +5,14 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
     const { email, password } = req.body as { email: string, password: string }
     const emailFound = await prisma.users.findUnique(
         {
-            where: { email: email }
+            where: { email: email },
+            select: {
+                email: true,
+                password: true,
+                name: true,
+                role: true,
+                id: true
+            }
         }
     )
     if (emailFound && emailFound.password) {
