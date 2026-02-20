@@ -11,6 +11,7 @@ const ExamRoom = () => {
     const [fetchedResult, setFetchedResult] = useState({})
     const [participants, setParticipants] = useState()
     const [leaderboard, setLeaderboard] = useState([])
+    const [isExamTaken, setExamTaken] = useState(false)
     const { socket, isConnected } = useSocketConnection();
     const { roomId } = useParams();
     const { user } = LoggedInUser();
@@ -24,7 +25,9 @@ const ExamRoom = () => {
                 });
                 setExamQuestion(res.data.mcqs);
             } catch (err) {
-                console.log(err);
+                if (err.response.status === 403) {
+                    setExamTaken(true);
+                }
             }
         };
 
@@ -68,7 +71,6 @@ const ExamRoom = () => {
                 roomId: roomId
             }
         })
-
         if (res.status === 201) {
             if (res.data.lastSubmittedOption.length !== 0) {
                 console.log(res.data);
@@ -89,7 +91,10 @@ const ExamRoom = () => {
                 <h2>Room</h2>
                 <span>Total participants: {participants}</span>
             </div>
-            <div className="flex  justify-between gap-2">
+            {
+            isExamTaken ? (
+                <h2>Exam taken</h2>
+            ):<div className="flex  justify-between gap-2">
                 <div className="w-full">
                     <div className=" p-2 rounded-md">
                         {
@@ -160,6 +165,7 @@ const ExamRoom = () => {
                     </div>
                 </div>
             </div>
+        }
             <FixedBottomBar buttonName="Submit" buttonAction={handleSubmitAnswer} />
         </div>
     );

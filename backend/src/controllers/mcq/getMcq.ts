@@ -4,6 +4,7 @@ import prisma from "../../database/prisma/prisma";
 export const getMcqs = async (req: FastifyRequest, res: FastifyReply) => {
     try {
         const { subjectId, yearId, roomId } = req.query as { subjectId?: number, yearId?: number, roomId?: number }
+        const { userId } = req.user as { userId: number }
         const whereClause: any = { isActive: true };
 
         if (
@@ -28,6 +29,19 @@ export const getMcqs = async (req: FastifyRequest, res: FastifyReply) => {
 
         if (roomId) {
             whereClause.roomId = Number(roomId);
+            const userIdToNumber = Number(userId)
+            const isExamTaken = await prisma.examAttempts.findFirst(
+                {
+                    where: {
+                        roomId: Number(roomId),
+                        userId: userIdToNumber
+                    }
+                }
+            )
+
+            if(isExamTaken){
+                return res.status(403).send({ message: "You have already taken this exam." })
+            }
         }
 
 
