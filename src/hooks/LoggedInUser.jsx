@@ -9,7 +9,6 @@ const LoggedInUser = () => {
         const fetchPosts = async () => {
             try {
                 const response = await axiosPublic.get('/logged-in-user');
-                console.log(response?.data);
                 setUser(response?.data.user)
                 setIsLoading(false)
             } catch (err) {

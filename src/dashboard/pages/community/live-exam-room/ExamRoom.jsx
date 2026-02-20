@@ -9,6 +9,8 @@ const ExamRoom = () => {
     const [examQuestion, setExamQuestion] = useState()
     const [selectedOption, setSelectedOption] = useState({})
     const [fetchedResult, setFetchedResult] = useState({})
+    const [participants, setParticipants] = useState()
+    const [leaderboard, setLeaderboard] = useState([])
     const { socket, isConnected } = useSocketConnection();
     const { roomId } = useParams();
     const { user } = LoggedInUser();
@@ -21,7 +23,6 @@ const ExamRoom = () => {
                     params: { roomId }
                 });
                 setExamQuestion(res.data.mcqs);
-                console.log(res.data.mcqs);
             } catch (err) {
                 console.log(err);
             }
@@ -36,15 +37,29 @@ const ExamRoom = () => {
             username: user?.userName,
             userId: user?.userId
         });
-    }, [roomId, isConnected, socket, user, axiosPublic]);
 
+        socket.on("user-joined", (data) => {
+            console.log("User joined:uuu", data);
+
+        })
+        socket.on("leaderboard-update", (data) => {
+            if (data.length === 0) return;
+            console.log(data, 'lead data');
+            setLeaderboard(data)
+        })
+        socket.on("room-user-count", (data) => {
+            console.log("User joined:", data);
+            setParticipants(data)
+        })
+    }, [roomId, isConnected, socket, user, axiosPublic]);
+    console.log(participants, "perticipent");
     const handleOptionSelect = async (questionId, optionId, isCorrect) => {
         setSelectedOption(prev => ({
             ...prev,
             [questionId]: { questionId, optionId, isCorrect }
         }))
     }
-
+    console.log(leaderboard);
     const handleSubmitAnswer = async () => {
         console.log("clicked");
         setSelectedOption({})
@@ -58,13 +73,22 @@ const ExamRoom = () => {
             if (res.data.lastSubmittedOption.length !== 0) {
                 console.log(res.data);
                 setFetchedResult(res.data.lastSubmittedOption)
+                socket.emit("leaderboard-update", {
+                    roomId,
+                    username: user?.userName,
+                    userId: user?.userId
+                })
+
+                console.log("clicked");
             };
         }
     }
-    console.log(selectedOption, 'selected options');
     return (
         <div className="w-[55rem] m-auto">
-            <h2>Room</h2>
+            <div className="border-b p-1 mb-3 flex justify-between items-center">
+                <h2>Room</h2>
+                <span>Total participants: {participants}</span>
+            </div>
             <div className="flex  justify-between gap-2">
                 <div className="w-full">
                     <div className=" p-2 rounded-md">
@@ -117,33 +141,22 @@ const ExamRoom = () => {
                 </div>
                 <div className="w-full">
                     <div className="border rounded-lg p-2 w-full">
-                        <div className='flex border-b bg-gray-50 p-5 rounded-lg items-center mb-1'>
-                            <h2 className="w-10 font-serif bg-red-300 h-10 rounded-full flex items-center justify-center">
-                                R
-                            </h2>
-                            <span className='ml-2'>Riad Sakar</span>
+                        {
+                            leaderboard?.map((leadBoard, i) => {
+                                return (
+                                    <div key={i} className='flex border-b bg-gray-50 p-5 rounded-lg items-center mb-1'>
+                                        <h2 className="w-10 font-serif bg-red-300 h-10 rounded-full flex items-center justify-center">
+                                            R
+                                        </h2>
+                                        <span className='ml-2'>{leadBoard.user.name}</span>
 
-                            {/* push to right */}
-                            <span className='ml-auto'>#1</span>
-                        </div>
-                        <div className='flex border-b bg-gray-50 p-5 rounded-lg items-center mb-1'>
-                            <h2 className="w-10 font-serif bg-red-300 h-10 rounded-full flex items-center justify-center">
-                                R
-                            </h2>
-                            <span className='ml-2'>Riad Sakar</span>
+                                        {/* push to right */}
+                                        <span className='ml-auto'>#1</span>
+                                    </div>
+                                )
+                            })
+                        }
 
-                            {/* push to right */}
-                            <span className='ml-auto'>#1</span>
-                        </div>
-                        <div className='flex border-b bg-gray-50 p-5 rounded-lg items-center mb-1'>
-                            <h2 className="w-10 font-serif bg-red-300 h-10 rounded-full flex items-center justify-center">
-                                R
-                            </h2>
-                            <span className='ml-2'>Riad Sakar</span>
-
-                            {/* push to right */}
-                            <span className='ml-auto'>#1</span>
-                        </div>
                     </div>
                 </div>
             </div>

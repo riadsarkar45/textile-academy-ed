@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import type { Server as HTTPServer } from "http";
-import { joinExamRoom, handleDisconnect } from "./join-exam-room";
+import { handleDisconnect, joinExamRoom } from "./join-exam-room";
 
 let io: Server | null = null;
 
@@ -9,24 +9,18 @@ export const socketInit = (server: HTTPServer) => {
         cors: {
             origin: "*",
             methods: ["GET", "POST"],
-            credentials: true,
         },
     });
 
     io.on("connection", (socket) => {
-        console.log(" User connected:", socket.id);
+        console.log("User connected:", socket.id);
 
-        socket.on("join-exam-room", ({ roomId, username, userId }: { roomId: string; username: string, userId: string }) => {
+        socket.on("join-exam-room", ({ roomId, username, userId }) => {
             joinExamRoom(socket, roomId, username, userId);
         });
 
         socket.on("disconnect", () => {
-            console.log(" User disconnected:", socket.id);
-            handleDisconnect(socket)
-        });
-
-        socket.on("userUpdate", (data) => {
-            console.log("User update:", data);
+            handleDisconnect(socket);
         });
     });
 
@@ -34,8 +28,6 @@ export const socketInit = (server: HTTPServer) => {
 };
 
 export const getIO = (): Server => {
-    if (!io) {
-        throw new Error("Socket.io not initialized! Call socketInit first.");
-    }
+    if (!io) throw new Error("Socket.io not initialized!");
     return io;
 };

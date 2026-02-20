@@ -2,24 +2,17 @@ import { Socket } from "socket.io";
 
 const socketUser = new Map<string, { userId: string; username: string; roomId: string }>();
 
-export const joinExamRoom = (socket: Socket, roomId: string, userId: string, username: string) => {
-    const fullRoomId = `exam-${roomId}`;
 
-    socket.join(fullRoomId);
+export const joinExamRoom = (socket: Socket, roomId: string, username: string, userId: string) => {
 
-    socketUser.set(socket.id, { userId, username, roomId: fullRoomId });
+    const roomName = `exam_${roomId}`;
 
-    const room = socket.nsp.adapter.rooms.get(fullRoomId);
-    const count = room ? room.size : 0;
+    socket.join(roomName);
 
-    socket.nsp.to(fullRoomId).emit("room-user-count", count);
-
-    socket.to(fullRoomId).emit("user-joined", {
-        userId,
-        username,
-    });
+    console.log(`${username} joined ${roomName}`);
 
 };
+
 
 
 export const handleDisconnect = (socket: Socket) => {
@@ -38,3 +31,9 @@ export const handleDisconnect = (socket: Socket) => {
     socket.to(roomId).emit("user-left", { userId });
 
 };
+
+export const handleUserSubmission = (socket: Socket, roomId: string, userId: string, username: string) => {
+    // if (!leaderBoard) return;
+    // socket.nsp.to(roomId).emit("leaderboard-update", leaderBoard);
+    // console.log("clicked");
+}

@@ -1,6 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../../database/prisma/prisma";
 import { mcqResults } from "../../utils/mcq-results";
+import { getIO } from "../socketIo/socket";
+import { liveLeaderboard } from "../socketIo/live-leaderboard";
 
 export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyReply) => {
   const { userId } = req.user as { userId: number }
@@ -84,6 +86,9 @@ export const mcqAttemptsController = async (req: FastifyRequest, res: FastifyRep
         }
       }
     )
+    const io = getIO();
+    const leadBoard = await liveLeaderboard(roomIdToNumber)
+    io.to(`exam_${roomId}`).emit("leaderboard-update", leadBoard);
     const submittedOptions = mcqResults(lastSubmittedOption)
     return res.status(201).send({ message: "Saved", lastSubmittedOption: submittedOptions, resultSummary: resultSummary });
   } catch (err) {
