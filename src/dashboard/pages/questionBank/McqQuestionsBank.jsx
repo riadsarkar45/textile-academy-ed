@@ -4,8 +4,10 @@ import FixedBottomBar from "../../../components/FixedBottomBar";
 import { Link, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../../../hooks/Axios";
+import Alert from "../../../components/Alert";
 const McqQuestions = () => {
     const [questionBank, setQuestionBank] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const axiosPublic = useAxiosPublic();
     const { subjectId } = useParams()
     console.log(subjectId);
@@ -14,8 +16,9 @@ const McqQuestions = () => {
             try {
                 const res = await axiosPublic.get(`/topics/${subjectId}`)
                 setQuestionBank(res.data.data);
+                setIsLoading(false)
             } catch (err) {
-                console.log(err);
+                console.log(err.response.status, "question bank error");
             }
         }
         fetchSubjects();
@@ -23,6 +26,9 @@ const McqQuestions = () => {
     return (
         <div className=" w-[50rem] m-auto">
             <h2 className="mb-8">Entrance Exam</h2>
+            {
+                isLoading && <Alert message={"Loading Questions..."} messageType={"loading"} />
+            }
             <div className="grid grid-cols-3 gap-3">
                 {
                     questionBank?.map((question, i) => {

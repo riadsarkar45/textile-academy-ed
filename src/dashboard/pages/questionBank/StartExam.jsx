@@ -5,9 +5,12 @@ import { Link, useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import useAxiosPublic from '../../../hooks/Axios';
 import LeaderBoard from '../../learderboard/LeaderBoard';
+import Alert from '../../../components/Alert';
 const StartExam = () => {
     const [attempts, setAttempts] = useState([])
     const [leaderBoard, setLeaderBoard] = useState([])
+    // const [errorMessage, setErrorMessage] = useState({ message: "", type: "" })
+    const [isLoading, setIsLoading] = useState(true);
     const { subjectId, yearId } = useParams()
     const axiosPublic = useAxiosPublic();
     console.log(subjectId);
@@ -17,10 +20,14 @@ const StartExam = () => {
                 const res = await axiosPublic.get(`/attempts-history/${subjectId}`)
                 const leaderboard = await axiosPublic.get(`/leaderboard/${subjectId}`)
                 setLeaderBoard(leaderboard?.data?.leaderboard);
+                setIsLoading(false);
                 console.log(leaderboard?.data?.leaderboard);
                 setAttempts(res.data.data);
             } catch (err) {
-                console.log(err);
+                console.log(err.response.status, "attempts history error");
+                if (err.response.status === 404) {
+                    // setErrorMessage({ message: "No attempts found for this exam.", type: "info" })
+                }
             }
         }
         fetchAttempts();
@@ -37,13 +44,24 @@ const StartExam = () => {
                             <span className='flex gap-1 items-center'> <span className='text-green-600 font-extrabold'>< FaRegEdit /></span> 15 Questions</span>
                         </div>
                     </div> */}
+                    {
+                        isLoading && <Alert message={"Loading exam details..."} messageType={"loading"} />
+                    }
                     <div className='w-full grid bg-white'>
                         <Link className='rounded-lg border mb-2 flex justify-center p-4 shadow-md bg-green-900 text-white font-semibold' to={`/exam/mcq/${subjectId}/${yearId}`}><span >Start Exam</span></Link>
                         <button className='rounded-lg border p-4 border-green-900 text-green-900 shadow-md '>See Question Paper</button>
                     </div>
                     <div>
                         <h2 className='mt-6 mb-3'>Previous Attempts</h2>
+
                         <div>
+                            {
+                                // errorMessage.message && <Alert message={errorMessage.message} messageType={errorMessage.type} />
+
+                                // attempts.length === 0 && <span className='mt-15 bg-yellow-500 yellow-500 bg-opacity-55 w-full p-4 rounded-md'>No attempts found for this subject</span>
+                                attempts.length === 0 && <span className='rounded-lg border mb-2 flex justify-center p-4 shadow-md bg-yellow-500 bg-opacity-30 text-yellow-500 font-semibold'>No attempts found for this subject</span>
+
+                            }
                             {
                                 attempts?.map((attempt, i) => {
                                     return (
@@ -90,6 +108,11 @@ const StartExam = () => {
 
                             <span className='ml-auto'>#1</span>
                         </div> */}
+
+                        {
+                            leaderBoard.length === 0 && <span className='rounded-lg border mb-2 flex justify-center p-4 shadow-md bg-yellow-500 bg-opacity-30 text-yellow-500 font-semibold'>Take this test to view the leaderboard</span>
+
+                        }
 
                     </div>
                 </div>

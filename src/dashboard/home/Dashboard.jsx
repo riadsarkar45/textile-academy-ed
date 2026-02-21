@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../../hooks/Axios";
+import Alert from "../../components/Alert";
 
 const Dashboard = () => {
     const [studentSummary, setStudentSummary] = useState({})
     const [leaderBoard, setLeaderBoard] = useState([])
     const [subjectWiseStats, setSubjectWiseStats] = useState([])
+    const [isLoading, setIsLoading] = useState(true);
     const axiosPublic = useAxiosPublic();
     useEffect(() => {
         const fetchAttempts = async () => {
@@ -15,13 +17,16 @@ const Dashboard = () => {
                 setSubjectWiseStats(res.data.subjectWiseStats);
                 setLeaderBoard(leaderBoard?.data?.leaderboard);
                 setStudentSummary(res.data);
+                setIsLoading(false);
             } catch (err) {
                 console.log(err);
             }
         }
         fetchAttempts();
     }, [axiosPublic])
-
+    if(isLoading){
+        return <Alert message="Loading dashboard..." messageType="loading" />
+    }
     return (
         <div className="w-[55rem] m-auto">
             <h2>Student Dashboard</h2>

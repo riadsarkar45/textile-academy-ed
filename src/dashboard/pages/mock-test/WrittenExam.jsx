@@ -3,12 +3,15 @@ import FixedBottomBar from "../../../components/FixedBottomBar";
 import McqExam from "./McqExam";
 import useAxiosPublic from "../../../hooks/Axios";
 import { useParams } from "react-router";
+import Alert from "../../../components/Alert";
 
 const Exam = () => {
     const [examQuestion, setExamQuestion] = useState([])
     const [selectedOption, setSelectedOption] = useState({});
     const [fetchedResult, setFetchedResult] = useState({})
     const [mcqResultSummary, setMcqResultSummary] = useState({})
+    const [isLoading, setIsLoading] = useState({ message: "", type: "", status: true });
+    const [isClicked, setIsClicked] = useState(false);
     const { subjectId, yearId } = useParams()
     const axiosPublic = useAxiosPublic();
     useEffect(() => {
@@ -18,6 +21,7 @@ const Exam = () => {
                     params: { subjectId, yearId }
                 })
                 setExamQuestion(res.data.mcqs);
+                setIsLoading({ message: "Questions Loading", type: "loading", status: false })
             } catch (err) {
                 console.log(err);
             }
@@ -27,7 +31,8 @@ const Exam = () => {
 
     const handleResultSubmit = async () => {
         console.log(selectedOption, "submitting");
-
+        setIsLoading({ message: "Submitting your answer...", type: "loading", status: true })
+        setIsClicked(true);
         const res = await axiosPublic.post(`/mcq/attempts`, selectedOption, {
             params: {
                 subjectId: subjectId,
@@ -44,7 +49,7 @@ const Exam = () => {
             }
         }
     }
-    console.log(selectedOption, "selected options");
+    console.log(isLoading, "selected options");
     return (
         <div className="w-[50rem] m-auto">
 
@@ -98,6 +103,10 @@ const Exam = () => {
 
             </div>
 
+            {
+                isLoading.status && <Alert message={isLoading.message || "Questions Loading..."} messageType={isLoading.type || "loading"} />
+            }
+
             <div>
                 <McqExam
                     selectedOption={selectedOption}
@@ -107,7 +116,7 @@ const Exam = () => {
                     mcqResultSummary={mcqResultSummary}
                 />
             </div>
-            {Object.keys(fetchedResult).length === 0 && (
+            {!isClicked && Object.keys(fetchedResult).length === 0 && (
                 <FixedBottomBar
                     buttonAction={handleResultSubmit}
                     buttonName="See Result"

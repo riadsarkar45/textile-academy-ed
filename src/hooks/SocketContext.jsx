@@ -8,7 +8,7 @@ export const useSocketConnection = () => {
     const { user } = LoggedInUser();
 
     useEffect(() => {
-        const newSocket = io("http://127.0.0.1:5000", {
+        const newSocket = io("https://textile-academy-ed-7.onrender.com", {
             withCredentials: true,
             transports: ["websocket"],
             auth: { userId: user?.id },
@@ -17,20 +17,18 @@ export const useSocketConnection = () => {
             reconnectionDelay: 1000,
         });
 
-        // ✅ Fixed: "connect" not "connection"
         newSocket.on("connect", () => {
             console.log("✅ Socket connected:", newSocket.id);
             setIsConnected(true);
         });
 
         newSocket.on("disconnect", (reason) => {
-            console.log("❌ Socket disconnected:", reason);
+            console.log("Socket disconnected:", reason);
             setIsConnected(false);
         });
 
-        // ✅ Fixed: "connect_error" not duplicate "disconnect"
         newSocket.on("connect_error", (error) => {
-            console.error("⚠️ Connection error:", error.message);
+            console.error(" Connection error:", error.message);
             setIsConnected(false);
         });
 

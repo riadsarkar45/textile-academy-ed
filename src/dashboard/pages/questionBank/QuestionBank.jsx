@@ -1,11 +1,11 @@
-import { GiGears, GiMaterialsScience, GiOfficeChair, GiEmptyMetalBucket, GiSewingMachine, GiSpinningWheel, GiTestTubes, GiVintageRobot } from "react-icons/gi";
-import { TbNeedleThread } from "react-icons/tb";
-import { MdRollerShades } from "react-icons/md";
+
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../../../hooks/Axios";
+import Alert from "../../../components/Alert";
 const QuestionBank = () => {
     const [subjects, setSubjects] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const axiosPublic = useAxiosPublic();
     useEffect(() => {
         const fetchSubjects = async () => {
@@ -13,6 +13,7 @@ const QuestionBank = () => {
                 const res = await axiosPublic.get("/subjects")
                 setSubjects(res.data.data);
                 console.log(res.data.data);
+                setIsLoading(false)
             } catch (err) {
                 console.log(err);
             }
@@ -23,6 +24,9 @@ const QuestionBank = () => {
     return (
         <div className="w-[55rem] m-auto">
             <h2 className="mb-8">Question Bank</h2>
+            {
+                isLoading && <Alert message={"Loading Question Bank..."} messageType={"loading"} />
+            }
             <div className="grid grid-cols-3 gap-4">
                 {
                     subjects?.map((sub, i) => {

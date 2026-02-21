@@ -3,20 +3,40 @@ import Logo from "../assets/cropped-online-textile-academy-logo-favicon.webp"
 import useAxiosPublic from "../hooks/Axios";
 import LoggedInUser from "../hooks/LoggedInUser";
 import { useNavigate } from "react-router";
+import Alert from "../components/Alert";
 const Login = () => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+    const [alertMessage, setAlertMessage] = useState({ message: "", type: "" });
     const axiosPublic = useAxiosPublic();
-    const { user } = LoggedInUser();
+    // const { user } = LoggedInUser();
     const navigate = useNavigate()
-    console.log(user);
     const handleLogin = async () => {
+        setIsLoading(true);
+        setAlertMessage({ message: "Logging in...", type: "loading" })
         console.log(email, password);
-        const res = await axiosPublic.post("/login", { email, password })
-        console.log(res.data);
-        if(res.data.message === "Login Successful"){
-            navigate("/")
+        try {
+            const res = await axiosPublic.post("/login", { email, password })
+            console.log(res.status);
+            if (res.status === 200) {
+                navigate("/")
+            }
+        } catch (err) {
+            console.log(err.response.data.message, "login error");
+            console.log(err.response.status, "login error");
+            if (err.response.status === 401) {
+                setAlertMessage({ message: err.response.data.message, type: "error" })
+            } else {
+                setAlertMessage({ message: "Something went wrong! Please try again.", type: "error" })
+            }
+        } finally {
+            // setIsLoading(false);
         }
+    }
+
+    if(isLoading){
+         <Alert message={alertMessage.message} messageType={alertMessage.type} />
     }
     return (
         <div className="bg-gray-50">
@@ -33,6 +53,9 @@ const Login = () => {
                         <h1 className="text-slate-900 text-center text-3xl font-semibold">
                             Sign in
                         </h1>
+                        {
+                            isLoading && alertMessage && <Alert message={alertMessage.message} messageType={alertMessage.type} />
+                        }
                         <form className="mt-7 space-y-3">
                             <div>
                                 <label className="text-slate-900 text-sm font-medium mb-2 block">
