@@ -3,10 +3,12 @@ import useAxiosPublic from "../../hooks/Axios";
 import { useEffect, useState } from "react";
 import { MdMeetingRoom } from "react-icons/md";
 import { useNavigate } from "react-router";
+import Alert from "../../components/Alert";
 const CreatedRooms = () => {
     const [createdRooms, setCreatedRooms] = useState([])
     const [selectedRoomId, setSelectedRoomId] = useState("")
     const [roomPassword, setRoomPassword] = useState("")
+    const [isLoading, setIsLoading] = useState({ message: "", type: "", status: true });
     const axiosPublic = useAxiosPublic();
     const navigate = useNavigate()
     useEffect(() => {
@@ -14,6 +16,7 @@ const CreatedRooms = () => {
             try {
                 const res = await axiosPublic.get(`/created-rooms`)
                 setCreatedRooms(res.data.rooms)
+                setIsLoading({ status: false });
                 console.log(res.data.rooms)
             } catch (err) {
                 console.log(err);
@@ -28,6 +31,7 @@ const CreatedRooms = () => {
 
     const handleSelectedJoin = async (roomId) => {
         console.log({ status: "Joining..." });
+        setIsLoading({ message: "Joining room...", type: "info", status: true })
         const roomDetail = {
             roomId: roomId,
             roomPassword: roomPassword
@@ -43,6 +47,9 @@ const CreatedRooms = () => {
             <div className="mb-4">
                 <h2>Created Rooms</h2>
             </div>
+            {
+                isLoading.status && <Alert message={isLoading.message || "Loading Rooms..."} messageType={isLoading.type || "loading"} />
+            }
             {
                 createdRooms?.map((room, i) => {
                     return (

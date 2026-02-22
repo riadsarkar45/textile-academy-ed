@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import FixedBottomBar from "../../../components/FixedBottomBar";
-import { useSocketConnection } from "../../../hooks/SocketContext";
+import FixedBottomBar from "../../../../components/FixedBottomBar";
+import { useSocketConnection } from "../../../../hooks/SocketContext";
 import { useParams } from "react-router";
-import LoggedInUser from "../../../hooks/LoggedInUser";
-import useAxiosPublic from "../../../hooks/Axios";
+import LoggedInUser from "../../../../hooks/LoggedInUser";
+import useAxiosPublic from "../../../../hooks/Axios";
 
 const ExamRoom = () => {
     const [examQuestion, setExamQuestion] = useState()

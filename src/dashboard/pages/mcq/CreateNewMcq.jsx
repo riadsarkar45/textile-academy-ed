@@ -2,10 +2,12 @@ import { useState } from "react";
 import Papa from "papaparse";
 import validateMcq from "../../validations/ValidateMCQCsv";
 import useAxiosPublic from "../../../hooks/Axios";
+import Alert from "../../../components/Alert";
 
 const CreateNewMcq = () => {
     const [mcqs, setMcqs] = useState([]);
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState({ message: "", type: "", status: false });
     const axiosPublic = useAxiosPublic();
     // CSV upload
     const handleFileUpload = (e) => {
@@ -35,16 +37,24 @@ const CreateNewMcq = () => {
         });
     };
     // option click (question-wise, safe)
-   console.log(mcqs);
+    console.log(mcqs);
 
     const handleMcqUpload = async () => {
-        console.log({message: "creating..."});
+        setIsLoading({ message: "Uploading...", type: "loading", status: true })
+
+        console.log({ message: "creating..." });
         const upload = await axiosPublic.post("/new-mcq", mcqs)
+        if(upload.status === 201) {
+            setIsLoading({ message: "MCQs uploaded successfully!", type: "success", status: false })
+        }
         console.log(upload.data);
     }
     console.log(mcqs);
     return (
         <div className="bg-gray-100 p-6">
+            {
+                isLoading.status && <Alert message={isLoading.message} messageType={isLoading.type} />
+            }
             <div className="max-w-6xl mx-auto">
 
                 {/* Header */}
@@ -96,12 +106,12 @@ const CreateNewMcq = () => {
                                             const optionText = mcq[`option${label}`];
                                             let bg = "bg-gray-200";
 
-                                            
+
 
                                             return (
                                                 <button
                                                     key={label}
-                                                    
+
                                                     className={`${bg} p-2 rounded-md text-left transition`}
                                                 >
                                                     <b>{label}.</b>{" "}

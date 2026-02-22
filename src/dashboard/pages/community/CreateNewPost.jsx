@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react';
 import { HiMiniPaperAirplane } from "react-icons/hi2";
 import useAxiosPublic from '../../../hooks/Axios';
 import Posts from './Posts';
+import Alert from '../../../components/Alert';
 const CreateNewPost = () => {
     const [postDescription, setPostDescription] = useState();
     const [posts, setPosts] = useState([]);
     const [images, setImages] = useState([])
+    const [isLoading, setIsLoading] = useState(true);
     const axiosPublic = useAxiosPublic();
 
     useEffect(() => {
@@ -16,6 +18,7 @@ const CreateNewPost = () => {
             try {
                 const response = await axiosPublic.get('/community/posts');
                 setPosts(response?.data.posts);
+                setIsLoading(false);
             } catch (err) {
                 console.error('Fetch error:', err);
             }
@@ -113,7 +116,12 @@ const CreateNewPost = () => {
 
             {/* users posts will be shown here */}
 
-            <Posts communityPosts={posts} />
+            {isLoading && <Alert message="Loading..." messageType="loading" />}
+            {
+                posts?.length === 0 ? <div className='flex justify-center items-center mt-[10rem] p-4 text-lg'>
+                    <span className=''>No posts found</span>
+                </div> : <Posts communityPosts={posts} />
+            }
         </div>
     );
 };
