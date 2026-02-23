@@ -44,6 +44,8 @@ const Exam = () => {
             if (res.data.lastSubmittedOption.length !== 0) {
                 setFetchedResult(res.data.lastSubmittedOption)
                 setMcqResultSummary(res.data.resultSummary);
+                setIsLoading({ message: "Result Loaded", type: "info", status: true })
+
             } else {
                 setSelectedOption({})
             }
