@@ -8,7 +8,7 @@ export const useSocketConnection = () => {
     const { user } = LoggedInUser();
 
     useEffect(() => {
-        const newSocket = io("https://textile-academy-ed-7.onrender.com", {
+        const newSocket = io("http://127.0.0.1:5000", {
             withCredentials: true,
             transports: ["websocket"],
             auth: { userId: user?.id },

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import useAxiosPublic from "../../../hooks/Axios";
+import Alert from "../../../components/Alert";
 import FixedBottomBar from "../../../components/FixedBottomBar";
 import McqExam from "./McqExam";
-import useAxiosPublic from "../../../hooks/Axios";
-import { useParams } from "react-router";
-import Alert from "../../../components/Alert";
 
 const Exam = () => {
     const [examQuestion, setExamQuestion] = useState([])

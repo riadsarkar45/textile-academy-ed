@@ -7,13 +7,13 @@ import CreateNewMcq from "../dashboard/pages/mcq/CreateNewMcq";
 import QuestionBank from "../dashboard/pages/questionBank/QuestionBank";
 import McqQuestions from "../dashboard/pages/questionBank/McqQuestionsBank";
 import StartExam from "../dashboard/pages/questionBank/StartExam";
-import Exam from "../dashboard/pages/mock-test/WrittenExam";
 import Login from "../auth/Login";
 import Registration from "../auth/Registration";
 import Dashboard from "../dashboard/home/Dashboard";
 import CompetitiveExam from "../dashboard/competitiveExam/CreateComExam";
 import CreatedRooms from "../dashboard/competitiveExam/CreatedRooms";
 import ExamRoom from "../dashboard/pages/community/live-exam-room/ExamRoom";
+import Exam from "../dashboard/pages/questionBank/WrittenExam";
 
 const Routes = createBrowserRouter(
     [
