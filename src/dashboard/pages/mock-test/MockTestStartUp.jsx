@@ -13,6 +13,7 @@ const MockTest = () => {
             try {
                 const res = await axiosPublic.get(`/subjects/${'mockTest'}`)
                 setMockSubjects(res.data.data);
+                console.log(res.data.data);
             } catch (err) {
                 console.log(err);
             }
