@@ -11,6 +11,13 @@ export const allSubjects = async (req: FastifyRequest, res: FastifyReply) => {
                     id: true,
                     subjectName: true,
                     topics: true,
+                    mcqQuestions:{
+                        select: {
+                            options: true,
+                            question: true, 
+                        }
+                    },
+                    
                     _count: {
                         select: { mcqQuestions: true, }
                     }
