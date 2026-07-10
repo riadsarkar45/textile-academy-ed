@@ -14,6 +14,10 @@ import CompetitiveExam from "../dashboard/competitiveExam/CreateComExam";
 import CreatedRooms from "../dashboard/competitiveExam/CreatedRooms";
 import ExamRoom from "../dashboard/pages/community/live-exam-room/ExamRoom";
 import Exam from "../dashboard/pages/questionBank/WrittenExam";
+import StichLockMachine from "../components/swingMachines/stichLockMachine/Jacka5eadiagram";
+import Machines from "../dashboard/pages/machineIntroduction/machines/Machines";
+import SwingMachine from "../dashboard/pages/machineIntroduction/swingMachine/SwingMachine";
+import AllDyeingMachine from "../dashboard/pages/machineIntroduction/dyeingMachine/AllDyeingMachines";
 
 const Routes = createBrowserRouter(
     [
@@ -70,6 +74,18 @@ const Routes = createBrowserRouter(
                     path: '/exam-room/:roomId',
                     element: <ExamRoom />
                 },
+                {
+                    path: '/machines',
+                    element: <Machines />
+                },
+                {
+                    path: '/swing-machine',
+                    element: <SwingMachine />
+                },
+                {
+                    path: "/dyeing-machine",
+                    element: <AllDyeingMachine />
+                }
             ]
         },
         {

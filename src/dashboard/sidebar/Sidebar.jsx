@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaHome } from "react-icons/fa";
-import { FaCircleQuestion } from "react-icons/fa6";
+import { FaBridge, FaCircleQuestion } from "react-icons/fa6";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
 import { FaPenToSquare } from "react-icons/fa6";
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -10,6 +10,7 @@ import { GiProgression } from "react-icons/gi";
 import { Link } from "react-router";
 import Logo from "../../assets/cropped-online-textile-academy-logo-favicon.webp"
 import LoggedInUser from "../../hooks/LoggedInUser";
+import { BsDiagram2 } from "react-icons/bs";
 export default function Sidebar() {
     const [open, setOpen] = useState(false);
     const { user } = LoggedInUser();
@@ -60,6 +61,12 @@ export default function Sidebar() {
                         className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
                     >
                         <FaPenToSquare /> Mock Exam
+                    </Link>
+                    <Link
+                        to="/machines"
+                        className=" flex items-center gap-2 text-sm px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                        <BsDiagram2 /> Machine Diagrams
                     </Link>
                     <Link
                         to="/community"

@@ -1,7 +1,7 @@
 import { app } from "./app";
 import { socketInit, getIO } from "./controllers/socketIo/socket";
 
-const PORT = 5000;
+const PORT = 3000;
 
 const start = async () => {
   try {
